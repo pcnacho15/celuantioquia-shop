@@ -1,26 +1,43 @@
-'use client';
+"use client";
 
 import Link from "next/link";
-
-
-
+import { useFormState, useFormStatus } from "react-dom";
+import { authenticate } from "@/modules/auth/actions/login";
+import clsx from "clsx";
+// import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export const LoginForm = () => {
+  // const router = useRouter();
+  const [state, dispatch] = useFormState(authenticate, undefined);
+  
+  useEffect(() => {
+    if (state === "Success") {
+      // router.replace("/");
+      window.location.replace("/");
+    }
+  }, [state]);
+
   return (
-    <div className="flex flex-col">
+    <form
+      action={dispatch}
+      className="flex flex-col"
+    >
       <label htmlFor="email">Correo electrónico</label>
       <input
         className="px-5 py-2 border bg-gray-200 rounded mb-5"
         type="email"
+        name="email"
       />
 
-      <label htmlFor="email">Contraseña</label>
+      <label htmlFor="password">Contraseña</label>
       <input
         className="px-5 py-2 border bg-gray-200 rounded mb-5"
-        type="email"
+        type="password"
+        name="password"
       />
 
-      <button className="btn-primary">Ingresar</button>
+      <LoginButton />
 
       {/* divisor l ine */}
       <div className="flex items-center my-5">
@@ -35,6 +52,23 @@ export const LoginForm = () => {
       >
         Crear una nueva cuenta
       </Link>
-    </div>
+    </form>
+  );
+};
+
+function LoginButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      type="submit"
+      className={clsx({
+        "btn-primary": !pending,
+        "btn-disabled": pending,
+      })}
+      disabled={pending}
+    >
+      Ingresar
+    </button>
   );
 }

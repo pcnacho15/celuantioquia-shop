@@ -13,6 +13,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Rol {
+  admin
+  user
+}
+
 enum Marca {
   apple
   samsung
@@ -57,4 +62,14 @@ model Product {
   // Relaciones
   categorias       Category        @relation(fields: [categoryId], references: [id])
   ProductImages    ProductImages[]
+}
+
+model User {
+  id            String    @id @default(uuid())
+  name          String
+  email         String    @unique
+  emailVerified DateTime?
+  password      String
+  role          Rol       @default(user)
+  image         String?
 }

@@ -1,4 +1,6 @@
-import { InputJsonValue,  } from "@prisma/client/runtime/library";
+import { InputJsonValue } from "@prisma/client/runtime/library";
+
+import bcryptjs from 'bcryptjs';
 
 interface SeedProduct {
   title: string;
@@ -15,6 +17,13 @@ interface SeedProduct {
   especificaciones?: InputJsonValue;
 }
 
+interface SeedUser {
+  email: string;
+  password: string;
+  name: string;
+  role: "admin" | "user";
+}
+
 type ValidCategories = "celulares" | "accesorios";
 type ValidMarcas =
   | "apple"
@@ -29,11 +38,26 @@ type ValidMarcas =
   | "oppo";
 
 interface SeedData {
+  users: SeedUser[];
   categories: string[];
   products: SeedProduct[];
 }
 
 export const initialData: SeedData = {
+  users: [
+    {
+      email: 'nacho@google.com',
+      name: 'Nacho Pistacho',
+      password: bcryptjs.hashSync('123456'),
+      role: 'admin',
+    },
+    {
+      email: 'tom@google.com',
+      name: 'Tom Soto',
+      password: bcryptjs.hashSync('123456'),
+      role: 'user',
+    }
+  ],
   categories: ["celulares", "accesorios"],
   products: [
     {

@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import { inter } from "@/utils";
 
 
 import "./globals.css";
-import { inter } from "@/utils";
+import { Provider } from "@/providers/Provider";
 
 
 
@@ -21,10 +22,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={inter.className}
-      >
-        {children}
+      <body className={inter.className}>
+        <Provider>{children}</Provider>
       </body>
     </html>
   );
