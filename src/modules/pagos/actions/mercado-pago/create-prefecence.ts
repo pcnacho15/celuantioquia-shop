@@ -33,7 +33,6 @@ export const createPreferenceMP = async (orderId: string) => {
         // failure: `http://localhost:3000/orders/${orderId}`,
       },
       notification_url: `${process.env.PROD_HOST}/api/payment/${orderId}`,
-      additional_info: orderId,
     },
   });
 
