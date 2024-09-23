@@ -28,7 +28,7 @@ export const createPreferenceMP = async (orderId: string) => {
         currency_id: "COP",
       })),
       back_urls: {
-        success: `http://localhost:3000/orders/${orderId}`,
+        success: `${process.env.PROD_HOST}/orders/${orderId}`,
         // pending: `http://localhost:3000/orders/${orderId}`,
         // failure: `http://localhost:3000/orders/${orderId}`,
       },
