@@ -10,9 +10,13 @@
     "seed": "ts-node src/seed/seed-database.ts"
   },
   "dependencies": {
+    "@mercadopago/sdk-react": "^0.0.19",
+    "@paypal/paypal-js": "^8.1.2",
+    "@paypal/react-paypal-js": "^8.7.0",
     "@prisma/client": "^5.19.1",
     "bcryptjs": "^2.4.3",
     "clsx": "^2.1.1",
+    "mercadopago": "^2.0.15",
     "next": "14.2.8",
     "next-auth": "^5.0.0-beta.20",
     "react": "^18",

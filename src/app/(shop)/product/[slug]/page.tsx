@@ -1,11 +1,7 @@
 import { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
-import { IoCartOutline } from "react-icons/io5";
 import {
-    ColorSelector,
   MobileSlideShow,
-  QuantitySelector,
-//   SizeSelector,
   SlideShow,
   StockLabel,
 } from "@/modules";
@@ -21,7 +17,6 @@ interface Props {
 
 export async function generateMetadata(
   { params }: Props,
-  parent: ResolvingMetadata
 ): Promise<Metadata> {
   // read route params
   const slug = params.slug;

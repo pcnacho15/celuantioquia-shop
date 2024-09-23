@@ -1,5 +1,4 @@
 import { fontTitle } from "@/utils";
-import Link from "next/link";
 import { RegisterForm } from "./ui/RegisterForm";
 
 export default function RegisterPage() {

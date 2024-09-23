@@ -31,3 +31,14 @@ export * from '@/modules/product/components/QuantitySelector';
 export * from '@/modules/product/components/SlideShow';
 export * from '@/modules/product/components/StockLabel';
 
+// pagos
+
+// components:
+export * from '@/modules/pagos/components/PaypalButton';
+
+// actions:
+// export * from '@/modules/pagos/actions/set-transaction-id';
+
+// orders
+// components
+export * from '@/modules/orders/components/OrderStatus';

@@ -1,7 +1,6 @@
 "use server";
 
 import { signIn } from "@/utils";
-import { AuthError } from "next-auth";
 
 // ...
 
