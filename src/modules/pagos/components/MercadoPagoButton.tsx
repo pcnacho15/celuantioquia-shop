@@ -10,7 +10,7 @@ interface Props {
 
 export const MercadoPagoButton = ({ preferenceId }: Props) => {
   useEffect(() => {
-    initMercadoPago("APP_USR-06f9c856-68fe-4f8e-904b-83e2aafa0c2a", {
+    initMercadoPago("APP_USR-c1200559-6256-4e8b-8a6b-cd5a86dc8d4c", {
       locale: "es-CO",
     });
   }, []);
