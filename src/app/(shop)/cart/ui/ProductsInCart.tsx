@@ -27,7 +27,7 @@ export const ProductsInCart = () => {
       {productsInCart.map((p) => (
         <div
           key={`${p.slug}-${p.color}`}
-          className="flex my-3 py-5 shadow-md rounded"
+          className="flex md:items-start my-3 py-5 shadow-md rounded w-auto bg-white"
         >
           <Image
             src={`/products/${p.image}`}
@@ -38,10 +38,10 @@ export const ProductsInCart = () => {
               width: "100px",
               height: "100px",
             }}
-            className="mr-5 rounded"
+            className="mr-5 px-1 rounded"
           />
 
-          <div className="flex flex-col justify-start items-start">
+          <div className="flex flex-col md:justify-start md:items-start text-sm">
             <Link
               className="hover:underline font-semibold"
               href={`/product/${p.slug}`}
@@ -56,7 +56,7 @@ export const ProductsInCart = () => {
               }).format(p.price)}
             </p>
 
-            <div className="flex justify-between items-center gap-8">
+            <div className="flex items-center gap-5 md:gap-8">
               <QuantitySelector
                 quantity={p.quantity}
                 onQuantityChanges={(value) => updateProductQuantity(p, value)}
@@ -66,7 +66,7 @@ export const ProductsInCart = () => {
                 onClick={() => removeProduct(p)}
                 className="underline text-red-700"
               >
-                <TbTrash size={30} />
+                <TbTrash size={20} />
               </button>
             </div>
           </div>

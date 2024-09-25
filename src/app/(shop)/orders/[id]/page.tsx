@@ -116,15 +116,16 @@ export default async function OrderPage({ params }: Props) {
               {order?.isPaid ? (
                 <OrderStatus isPaid={order?.isPaid ?? false} />
               ) : (
-                // <PaypalButton
-                //   amount={order!.total}
-                //   orderId={order!.id}
-                // />
-
-                <MercadoPagoButton
-                  // amount={order!.total}
-                  preferenceId={preferenceId}
-                />
+                <>
+                  <MercadoPagoButton
+                    // amount={order!.total}
+                    preferenceId={preferenceId}
+                  />
+                  {/* <PaypalButton
+                    amount={order!.total}
+                    orderId={order!.id}
+                  /> */}
+                </>
               )}
             </div>
           </div>

@@ -47,15 +47,17 @@ export const Pagination = ({ totalPages }: Props) => {
       <nav aria-label="Page navigation example">
         <ul className="flex list-style-none">
           <li className="page-item mr-3">
-            <Link
-              className="page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 rounded text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
-              href={createPageUrl(currentPage - 1)}
-            >
-              <div className="flex items-start gap-1">
-                <IoChevronBack size={25} />
-                Anterior
-              </div>
-            </Link>
+            {currentPage > 1 && (
+              <Link
+                className="page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 rounded text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
+                href={createPageUrl(currentPage - 1)}
+              >
+                <div className="flex items-start gap-1">
+                  <IoChevronBack size={25} />
+                  Anterior
+                </div>
+              </Link>
+            )}
           </li>
 
           {allPages.map((page, index) => (
@@ -64,13 +66,10 @@ export const Pagination = ({ totalPages }: Props) => {
               className="page-item"
             >
               <Link
-                className={clsx(
-                  "page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 rounded text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none",
-                  {
-                    "bg-lime-600 text-white hover:bg-lime-600 hover:text-white shadow-lg":
-                      page === currentPage,
-                  }
-                )}
+                className={`relative block py-1.5 px-3 border-0 outline-none mx-1 rounded text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none ${
+                  page === currentPage &&
+                  "bg-lime-600 text-white hover:bg-lime-600 hover:text-white shadow-lg"
+                }`}
                 href={createPageUrl(page)}
               >
                 {page}

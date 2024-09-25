@@ -35,15 +35,15 @@ export const OrderSummary = () => {
         <span>Impuestos (15%)</span>
         <span className="text-right">{currencyFormat(tax)}</span>
 
-        <span className="mt-5 text-2xl">Total: </span>
-        <span className="mt-5 text-2xl text-right">
-          {currencyFormat(total)}
-        </span>
+        <div className="flex justify-between flex-col flex-wrap w-full">
+          <span className="mt-5 text-2xl">Total: </span>
+          <span className="mt-1 text-2xl">{currencyFormat(total)}</span>
+        </div>
       </div>
       <div className="mt-4 mb-2 w-full">
         {totalItems > 0 ? (
           <Link
-            className={`flex btn-primary justify-center`}
+            className={`flex items-center text-center justify-center bg-gradient-to-r from-lime-700 to-lime-600 rounded mt-3 lg:mt-0 py-2 w-full text-white font-semibold hover:cursor-pointer hover:bg-lime shadow-xl hover:scale-105 transition-all duration-150`}
             href="/checkout/address"
           >
             Finalizar compra
