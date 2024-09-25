@@ -56,7 +56,7 @@ export const ProductsInCart = () => {
               }).format(p.price)}
             </p>
 
-            <div className="flex items-center gap-5 md:gap-8">
+            <div className="flex items-center gap-5 md:gap-8 mt-3">
               <QuantitySelector
                 quantity={p.quantity}
                 onQuantityChanges={(value) => updateProductQuantity(p, value)}
