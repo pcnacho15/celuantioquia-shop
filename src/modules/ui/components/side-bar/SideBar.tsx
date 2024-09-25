@@ -125,7 +125,7 @@ export const Sidebar = () => {
             <Link
               href="/profile"
               onClick={() => closeMenu()}
-              className="flex items-center p-2 hover:bg-gray-100 rounded transition-all"
+              className="flex items-center p-2 mt-0 md:mt-10 hover:bg-gray-100 rounded transition-all"
             >
               <IoPersonOutline size={30} />
               <span className="ml-3 text-xl">Perfil</span>
