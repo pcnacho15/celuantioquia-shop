@@ -5,11 +5,14 @@ import { useUiStore } from "@/modules";
 import clsx from "clsx";
 
 import {
+  IoBulbOutline,
   IoCloseOutline,
+  IoHomeOutline,
   IoLogInOutline,
   IoLogOutOutline,
   IoPeopleOutline,
   IoPersonOutline,
+  IoPhonePortraitOutline,
   IoSearchOutline,
   IoShirtOutline,
   IoTicketOutline,
@@ -53,7 +56,7 @@ export const Sidebar = () => {
       {/* Sidemenu */}
       <nav
         className={clsx(
-          "fixed p-5 right-0 top-0 w-[500px] h-screen bg-white z-20 shadow-2xl transform transition-all duration-300",
+          "fixed p-5 right-0 top-0 w-[350px] md:w-[500px] h-screen bg-white z-20 shadow-2xl transform transition-all duration-300",
           {
             "translate-x-full": !isSideMenuOpen,
           }
@@ -78,6 +81,45 @@ export const Sidebar = () => {
         </div>
 
         {/* Menú */}
+
+        {/* Opciones de Menu */}
+        <div className="flex flex-col md:hidden">
+          <Link
+            onClick={() => closeMenu()}
+            className={`flex items-center gap-3 text-xl mt-10 p-2 rounded transition-all ${
+              pathName === "/" && "bg-gray-100 font-semibold"
+            }`}
+            href="/"
+          >
+            <IoHomeOutline size={30} />
+            <span>Inicio</span>
+          </Link>
+          <Link
+            onClick={() => closeMenu()}
+            className={`flex items-center gap-3 text-xl mt-10 p-2 rounded transition-all ${
+              pathName === "/categories/celulares" &&
+              "bg-gray-100 font-semibold"
+            }`}
+            href="/categories/celulares"
+          >
+            <IoPhonePortraitOutline size={30} />
+            <span>Celulares</span>
+          </Link>
+          <Link
+            onClick={() => closeMenu()}
+            className={`flex items-center gap-3 text-xl mt-10 p-2 rounded transition-all ${
+              pathName === "/categories/accesorios" &&
+              "bg-gray-100 font-semibold"
+            }`}
+            href="/categories/accesorios"
+          >
+            <IoBulbOutline size={30} />
+            <span>Accesorios</span>
+          </Link>
+          {/* Separador */}
+          <div className="w-full h-px bg-gray-200 my-10"></div>
+        </div>
+
         {isAuthenticated && (
           <>
             <Link
@@ -91,7 +133,7 @@ export const Sidebar = () => {
 
             <Link
               href="/orders"
-              onClick={ () => closeMenu() }
+              onClick={() => closeMenu()}
               className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
             >
               <IoTicketOutline size={30} />

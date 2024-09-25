@@ -47,7 +47,7 @@ export const ProductGridItem = ({ product }: Props) => {
   // };
 
   return (
-    <div className="rounded-xl overflow-hidden fade-in bg-white">
+    <div className="rounded-xl overflow-hidden fade-in bg-white w-full h-full">
       <Link href={`/product/${product.slug}`}>
         <Image
           src={`/products/${displayImage}`}
@@ -64,14 +64,15 @@ export const ProductGridItem = ({ product }: Props) => {
         </div> */}
       </Link>
 
-      <div className="p-4 flex flex-col">
+      <div className="p-4 flex flex-col gap-5">
         <Link
-          className="hover:text-lime-600 font-semibold"
+          className="hover:text-lime-600 font-semibold text-ellipsis"
           href={`/product/${product.slug}`}
         >
           {product.title}
         </Link>
-        <div className="flex flex-col lg:flex-row items-center mt-3">
+
+        <div className="flex flex-col lg:flex-row items-center">
           <div className="flex flex-col">
             <span className="font-bold">{currencyFormat(product.price)}</span>
             {product.priceCompare && (
