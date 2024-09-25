@@ -80,7 +80,7 @@ export const ProductGridItem = ({ product }: Props) => {
               </span>
             )}
           </div>
-          <button className="flex items-center gap-2 text-center justify-center bg-gradient-to-r from-lime-700 to-lime-600 rounded mt-3 lg:mt-0  mx-5 py-2 w-full text-white font-semibold hover:cursor-pointer hover:bg-lime shadow-xl hover:scale-105">
+          <button className="flex items-center gap-2 text-center justify-center bg-gradient-to-r from-lime-700 to-lime-600 rounded mt-3 lg:mt-0  mx-5 py-2 w-full text-white font-semibold hover:cursor-pointer hover:bg-lime shadow-md hover:scale-105 transition-all duration-150">
             Agregar
             <RiShoppingBasket2Line size={25} />
           </button>
