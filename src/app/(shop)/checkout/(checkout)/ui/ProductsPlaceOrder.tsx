@@ -23,7 +23,7 @@ export const ProductsPlaceOrder = () => {
       {productsInCart.map((p) => (
         <div
           key={`${p.slug}-${p.color}`}
-          className="flex my-3 py-5 shadow-md rounded"
+          className="flex my-3 py-5 px-2 shadow-md rounded"
         >
           <Image
             src={`/products/${p.image}`}
@@ -38,10 +38,10 @@ export const ProductsPlaceOrder = () => {
           />
 
           <div className="flex flex-col justify-start items-start">
-            <span className="font-semibold">
+            <span className="font-semibold text-sm">
               <p>{p.title} ({p.quantity})</p>
             </span>
-            <p className="capitalize mb-2">{p.color}</p>
+            <p className="capitalize text-sm mt-1 underline mb-2">{p.color}</p>
             <p className="mb-2">
               Subtotal: {''}
               {currencyFormat(p.price * p.quantity)}

@@ -29,7 +29,7 @@ export default async function OrderPage({ params }: Props) {
   const address = order!.OrderAdress;
 
   return (
-    <div className="flex justify-center items-center mb-72 px-10 sm:px-0">
+    <div className="flex justify-center items-center mb-72 px-0">
       <div className="flex flex-col w-[1000px]">
         <Title title={`Orden #${id.split("-").at(-1)}`} />
 
@@ -70,7 +70,7 @@ export default async function OrderPage({ params }: Props) {
           </div>
 
           {/* Checkout - Resumen de orden */}
-          <div className="bg-white rounded-xl shadow-xl p-7">
+          <div className="flex flex-col bg-white rounded-xl shadow-xl p-7">
             <h2 className="text-2xl mb-2">Dirección de entrega</h2>
             <div className="mb-10">
               <p className="text-xl">
@@ -106,13 +106,13 @@ export default async function OrderPage({ params }: Props) {
               <span>Impuestos (15%)</span>
               <span className="text-right">{currencyFormat(order!.tax)}</span>
 
-              <span className="mt-5 text-2xl">Total:</span>
-              <span className="mt-5 text-2xl text-right">
-                {currencyFormat(order!.total)}
-              </span>
+              <div className="flex flex-col flex-wrap w-full">
+                <span className="mt-5 text-2xl">Total: </span>
+                <span className="mt-1 text-2xl">{currencyFormat(order!.total)}</span>
+              </div>
             </div>
 
-            <div className="mt-5 mb-2 w-full">
+            <div className="mt-5 mb-2 w-auto">
               {order?.isPaid ? (
                 <OrderStatus isPaid={order?.isPaid ?? false} />
               ) : (

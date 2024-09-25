@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { Product } from "../interfaces/Product";
+import { CartProduct, Product } from "../interfaces/Product";
 import { currencyFormat } from "@/utils";
 import { TiPlus } from "react-icons/ti";
 import { RiShoppingBasket2Line } from "react-icons/ri";
@@ -15,39 +15,41 @@ interface Props {
 
 export const ProductGridItem = ({ product }: Props) => {
   const [displayImage, setDisplayImage] = useState(product.images[0]);
-  //   const [posted, setPosted] = useState(false);
-  // const addProductToCart = useCartStore((state) => state.addProductToCart);
+  const [posted, setPosted] = useState(false);
+  const [colorActive, setColorActive] = useState(true);
+  const [color, setColor] = useState<string | undefined>(product.colores[0]);
+  const [quantity, setQuantity] = useState<number>(1);
+  const addProductToCart = useCartStore((state) => state.addProductToCart);
 
-  
-  // const addProductCart = () => {
-  //   setPosted(true);
+  const addProductCart = () => {
+    setPosted(true);
 
-  //   if (product.colores.length >= 1) {
-  //     if (!color) {
-  //       setColorActive(false);
-  //       return;
-  //     }
-  //   }
+    if (product.colores.length >= 1) {
+      if (!color) {
+        setColorActive(false);
+        return;
+      }
+    }
 
-  //   const cartProduct: CartProduct = {
-  //     id: product.id,
-  //     slug: product.slug,
-  //     title: product.title,
-  //     price: product.price,
-  //     quantity: quantity,
-  //     color: color,
-  //     image: product.images[0],
-  //   };
+    const cartProduct: CartProduct = {
+      id: product.id,
+      slug: product.slug,
+      title: product.title,
+      price: product.price,
+      quantity: quantity,
+      color: color,
+      image: product.images[0],
+    };
 
-  //   addProductToCart(cartProduct);
-  //   setPosted(false);
-  //   setQuantity(1);
-  //   setColor(undefined);
-  //   // console.log({ color, quantity });
-  // };
+    addProductToCart(cartProduct);
+    setPosted(false);
+    setQuantity(1);
+    setColor(undefined);
+    // console.log({ color, quantity });
+  };
 
   return (
-    <div className="rounded-xl overflow-hidden fade-in bg-white w-full h-full">
+    <div className="flex flex-col rounded-xl overflow-hidden fade-in bg-white w-full h-full">
       <Link href={`/product/${product.slug}`}>
         <Image
           src={`/products/${displayImage}`}
@@ -64,15 +66,15 @@ export const ProductGridItem = ({ product }: Props) => {
         </div> */}
       </Link>
 
-      <div className="p-4 flex flex-col gap-5">
+      <div className="p-4 flex flex-col gap-5 grow">
         <Link
-          className="hover:text-lime-600 font-semibold text-ellipsis"
+          className="hover:text-lime-600 font-semibold text-ellipsis grow"
           href={`/product/${product.slug}`}
         >
           {product.title}
         </Link>
 
-        <div className="flex flex-col lg:flex-row items-center">
+        <div className="flex flex-col lg:flex-row items-center gap-1 md:gap-2">
           <div className="flex flex-col">
             <span className="font-bold">{currencyFormat(product.price)}</span>
             {product.priceCompare && (
@@ -81,7 +83,10 @@ export const ProductGridItem = ({ product }: Props) => {
               </span>
             )}
           </div>
-          <button className="flex items-center gap-2 text-center justify-center bg-gradient-to-r from-lime-700 to-lime-600 rounded mt-3 lg:mt-0  mx-5 py-2 w-full text-white font-semibold hover:cursor-pointer hover:bg-lime shadow-md hover:scale-105 transition-all duration-150">
+          <button
+            onClick={() => addProductCart()}
+            className="btn-primary"
+          >
             Agregar
             <RiShoppingBasket2Line size={25} />
           </button>

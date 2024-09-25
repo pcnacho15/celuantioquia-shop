@@ -90,10 +90,10 @@ export const PlaceOrder = () => {
         <span>Impuestos (15%)</span>
         <span className="text-right">{currencyFormat(tax)}</span>
 
-        <span className="mt-5 text-2xl">Total: </span>
-        <span className="mt-5 text-2xl text-right">
-          {currencyFormat(total)}
-        </span>
+        <div className="flex justify-between flex-col flex-wrap w-full">
+          <span className="mt-5 text-2xl">Total: </span>
+          <span className="mt-1 text-2xl">{currencyFormat(total)}</span>
+        </div>
       </div>
 
       <div className="mt-5 mb-2 w-full">
@@ -121,8 +121,8 @@ export const PlaceOrder = () => {
 
         <button
           className={clsx("flex w-full justify-center", {
-            'btn-primary': !isPlacingOrder,
-            'btn-disabled': isPlacingOrder,
+            "btn-primary": !isPlacingOrder,
+            "btn-disabled": isPlacingOrder,
           })}
           onClick={onPlaceOrder}
         >

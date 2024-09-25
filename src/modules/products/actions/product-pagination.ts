@@ -29,15 +29,21 @@ export const getPaginatedProductsWithImages = async ({
           },
         },
       },
-      where:{
-        categoryId: categoryId
-      }
+      where: {
+        categoryId: categoryId,
+        inStock: {
+          gt: 0,
+        },
+      },
     });
 
     // Obtener total de todos los productos
     const totalCount = await prisma.product.count({
       where: {
         categoryId: categoryId,
+        inStock: {
+          gt: 0,
+        },
       },
     });
     const totalPages = Math.ceil(totalCount / take);
@@ -51,7 +57,7 @@ export const getPaginatedProductsWithImages = async ({
       })),
     };
   } catch (error) {
-    console.log(error)
+    console.log(error);
     throw new Error("No se pudo cargar los productos");
   }
 };

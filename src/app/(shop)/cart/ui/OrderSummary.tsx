@@ -43,7 +43,7 @@ export const OrderSummary = () => {
       <div className="mt-4 mb-2 w-full">
         {totalItems > 0 ? (
           <Link
-            className={`flex items-center text-center justify-center bg-gradient-to-r from-lime-700 to-lime-600 rounded mt-3 lg:mt-0 py-2 w-full text-white font-semibold hover:cursor-pointer hover:bg-lime shadow-xl hover:scale-105 transition-all duration-150`}
+            className={`btn-primary`}
             href="/checkout/address"
           >
             Finalizar compra
