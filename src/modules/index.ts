@@ -42,3 +42,13 @@ export * from '@/modules/pagos/components/PaypalButton';
 // orders
 // components
 export * from '@/modules/orders/components/OrderStatus';
+
+// actions
+export * from '@/modules/orders/actions/get-paginated-orders';
+
+// users
+// interfaces
+export * from '@/modules/users/interfaces/user.interface';
+// actions
+// export * from '@/modules/users/actions/change-user-role';
+export * from '@/modules/users/actions/get-paginated-users';

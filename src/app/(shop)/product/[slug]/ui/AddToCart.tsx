@@ -75,7 +75,7 @@ export const AddToCart = ({ product }: Props) => {
       {/* Botón */}
       <button
         onClick={() => addProductCart()}
-        className="flex items-center btn-primary my-5"
+        className="flex items-center bg-gradient-to-r from-lime-700 to-lime-600 rounded my-5 p-2 text-white font-semibold hover:cursor-pointer shadow-xl"
       >
         <IoCartOutline className="mr-2" />
         Agregar al carrito

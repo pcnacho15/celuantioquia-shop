@@ -1,21 +1,20 @@
 // https://tailwindcomponents.com/component/hoverable-table
-import { Title } from "@/modules";
-import { getOrdersByUser } from "@/modules/orders/actions/get-orders-by-user";
+import { getPaginatedOrders, Title } from "@/modules";
 
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { IoCardOutline } from "react-icons/io5";
 
 export default async function OrdersPage() {
-  const { ok, orders = [] } = await getOrdersByUser();
+  const { ok, orders = [] } = await getPaginatedOrders();
 
   if (!ok) {
-    redirect("/auth/login");
+    redirect("/");
   }
 
   return (
     <>
-      <Title title="Mis órdenes" />
+      <Title title="Todas las órdenes" />
 
       <div className="mb-10">
         <table className="min-w-full">
