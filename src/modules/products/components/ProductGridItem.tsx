@@ -82,19 +82,19 @@ export const ProductGridItem = ({ product }: Props) => {
 
       <div className="p-4 flex flex-col gap-5 grow">
         <div className="flex flex-col grow gap-1">
-          <div className="flex justify-between items-center gap-1 mb-2">
+          <div className="flex justify-between items-center gap-3 mb-2">
             <span
               className={`${fontTitle.className} uppercase font-base text-gray-400 text-sm`}
             >
               {product.marca}
             </span>
             {product.bateria && (
-              <div className="flex items-center rounded bg-neutral-100 shadow-md w-auto h-6 lg:h-auto lg:mr-8 pr-1">
+              <div className="flex items-center rounded bg-[#FFF8E8] shadow-md w-auto h-6 lg:h-auto lg:mr-8 pr-1">
                 <MdBatteryCharging90
                   size={23}
-                  className="text-lime-500"
+                  className="text-lime-600"
                 />
-                <span className=" text-xs lg:text-sm text-neutral-900 font-bold">
+                <span className=" text-sm lg:text-sm text-neutral-700 font-semibold">
                   {product.bateria}%
                 </span>
               </div>
