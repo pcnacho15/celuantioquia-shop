@@ -37,7 +37,7 @@ export interface CartProduct {
 }
 
 // type ValidCategories = "celulares" | "accesorios";
-type ValidMarcas =
+export type ValidMarcas =
   | "apple"
   | "samsung"
   | "xiaomi"

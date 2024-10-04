@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export const Footer = () => {
   return (
-    <div className="flex w-full justify-center text-xs mb-10 mt-64">
+    <div className="flex px-10 w-full justify-center text-xs mb-5">
       <Link href="/">
         <span className={`${fontTitle.className} antialiased font-bold `}>
           Celu Antioquia{" "}
