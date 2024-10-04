@@ -7,13 +7,23 @@ export interface Product {
   images: string[];
   inStock: number;
   price: number;
-  priceCompare?: number;
+  discount?: number | null;
   slug: string;
   tags?: string[];
   // category: ValidCategories;
   marca: ValidMarcas;
-  colores: string[];
+  color: string | null;
+  estado: string;
+  bateria?: number | null;
   especificaciones?: JsonValue;
+}
+
+export interface ProductImage {
+  id: number;
+  productId: string;
+  url: string;
+  codeColor?: string | null;
+  color?: string | null;
 }
 
 export interface CartProduct {
@@ -22,7 +32,7 @@ export interface CartProduct {
   title: string;
   price: number;
   quantity: number;
-  color?: string;
+  color?: string | null;
   image: string;
 }
 

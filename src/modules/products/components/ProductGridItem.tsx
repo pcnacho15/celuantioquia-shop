@@ -4,16 +4,15 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { CartProduct, Product } from "../interfaces/Product";
-import { currencyFormat } from "@/utils";
-import { TiPlus } from "react-icons/ti";
+import { currencyFormat, fontTitle } from "@/utils";
 import { RiShoppingBasket2Line } from "react-icons/ri";
 import { useCartStore } from "@/modules/cart";
 import { FaRegCircleCheck } from "react-icons/fa6";
+import { MdBatteryCharging90 } from "react-icons/md";
 
 interface Props {
   product: Product;
 }
-
 
 export const sleep = (seconds: number = 1) => {
   return new Promise((resolve) => {
@@ -26,7 +25,7 @@ export const sleep = (seconds: number = 1) => {
 export const ProductGridItem = ({ product }: Props) => {
   const [displayImage, setDisplayImage] = useState(product.images[0]);
   const [posted, setPosted] = useState(false);
-  const [check, setCheck] = useState(false)
+  const [check, setCheck] = useState(false);
   // const [colorActive, setColorActive] = useState(true);
   // const [color, setColor] = useState<string | undefined>(product.colores[0]);
   // const [quantity, setQuantity] = useState<number>(1);
@@ -50,7 +49,7 @@ export const ProductGridItem = ({ product }: Props) => {
       title: product.title,
       price: product.price,
       quantity: 1,
-      color: product.colores[0],
+      color: product.color,
       image: product.images[0],
     };
 
@@ -72,8 +71,8 @@ export const ProductGridItem = ({ product }: Props) => {
           className="w-full object-cover rounded"
           width={500}
           height={500}
-          onMouseEnter={() => setDisplayImage(product.images[1])}
-          onMouseLeave={() => setDisplayImage(product.images[0])}
+          // onMouseEnter={() => setDisplayImage(product.images[1])}
+          // onMouseLeave={() => setDisplayImage(product.images[0])}
           priority
         />
         {/* <div className="relative bg-lime-600 h-9 text-white font-semibold text-center">
@@ -82,21 +81,65 @@ export const ProductGridItem = ({ product }: Props) => {
       </Link>
 
       <div className="p-4 flex flex-col gap-5 grow">
-        <Link
-          className="hover:text-lime-600 font-semibold text-ellipsis grow"
-          href={`/product/${product.slug}`}
-        >
-          {product.title}
-        </Link>
+        <div className="flex flex-col grow gap-1">
+          <div className="flex justify-between items-center gap-1 mb-2">
+            <span
+              className={`${fontTitle.className} uppercase font-base text-gray-400 text-sm`}
+            >
+              {product.marca}
+            </span>
+            {product.bateria && (
+              <div className="flex items-center rounded bg-neutral-100 shadow-md w-auto h-6 lg:h-auto lg:mr-8 pr-1">
+                <MdBatteryCharging90
+                  size={23}
+                  className="text-lime-500"
+                />
+                <span className=" text-xs lg:text-sm text-neutral-900 font-bold">
+                  {product.bateria}%
+                </span>
+              </div>
+            )}
+          </div>
+
+          <Link
+            className="hover:text-lime-600  text-ellipsis grow"
+            href={`/product/${product.slug}`}
+          >
+            <div className="flex flex-col">
+              <span>
+                {product.title}{" "}
+                <span className="capitalize text-sm font-semibold">
+                  ({product.color})
+                </span>{" "}
+              </span>
+              <span className="capitalize text-sm font-semibold text-gray-400 mt-1">
+                {product.estado === "exhibicion"
+                  ? "exhibición"
+                  : product.estado}
+              </span>
+            </div>
+          </Link>
+        </div>
 
         <div className="flex flex-col lg:flex-row items-center gap-1 md:gap-2">
           <div className="flex flex-col">
-            {product.priceCompare && (
-              <span className="text-gray-400 line-through w- text-sm">
-                {currencyFormat(product.priceCompare)}
+            <div className="flex items-center justify-center">
+              <span className={`${!product.discount && "mb-5"} font-bold`}>
+                {currencyFormat(product.price)}
+              </span>
+              {product.discount && (
+                <span className="text-xs bg-red-600 rounded text-white px-1 ml-1">
+                  -{product.discount}%
+                </span>
+              )}
+            </div>
+            {product.discount && (
+              <span className="text-gray-400 line-through text-sm">
+                {currencyFormat(
+                  (product.price * product.discount) / 100 + product.price
+                )}
               </span>
             )}
-            <span className="font-bold">{currencyFormat(product.price)}</span>
           </div>
           {posted ? (
             <button
@@ -122,7 +165,10 @@ export const ProductGridItem = ({ product }: Props) => {
               disabled={posted}
             >
               Agregar
-              <RiShoppingBasket2Line size={25} className="ml-1" />
+              <RiShoppingBasket2Line
+                size={25}
+                className="ml-1"
+              />
             </button>
           )}
         </div>

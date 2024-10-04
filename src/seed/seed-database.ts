@@ -39,7 +39,7 @@ async function main() {
     });
 
     // insertar imagenes
-    const imagesData = images.map((image) => ({
+    const imagesData = images.map((image, index) => ({
       productId: dbProduct.id,
       url: image,
     }));

@@ -31,6 +31,11 @@ enum Marca {
   oppo
 }
 
+enum Estado {
+  nuevo
+  exhibicion
+}
+
 model Category {
   id      String    @id @default(uuid())
   name    String    @unique
@@ -52,10 +57,12 @@ model Product {
   description      String
   inStock          Int
   price            Float    @default(0)
-  priceCompare     Float    @default(0)
+  discount         Int?
   slug             String   @unique
   tags             String[] @default([])
-  colores          String[] @default([])
+  color            String?
+  estado           Estado
+  bateria          Float?
   marca            Marca
   especificaciones Json?
 

@@ -17,24 +17,24 @@ interface Props {
 export const AddToCart = ({ product }: Props) => {
   const addProductToCart = useCartStore((state) => state.addProductToCart);
 
-  const [color, setColor] = useState<string | undefined>();
+  // const [color, setColor] = useState<string | undefined>();
   const [quantity, setQuantity] = useState<number>(1);
   const [posted, setPosted] = useState(false);
   const [colorActive, setColorActive] = useState(true);
 
-  useEffect(() => {
-    setColorActive(true);
-  }, [color]);
+  // useEffect(() => {
+  //   setColorActive(true);
+  // }, [color]);
 
   const addProductCart = () => {
     setPosted(true);
 
-    if (product.colores.length >= 1) {
-      if (!color) {
-        setColorActive(false);
-        return;
-      }
-    }
+    // if (product.colores.length >= 1) {
+    //   if (!color) {
+    //     setColorActive(false);
+    //     return;
+    //   }
+    // }
 
     const cartProduct: CartProduct = {
       id: product.id,
@@ -42,14 +42,14 @@ export const AddToCart = ({ product }: Props) => {
       title: product.title,
       price: product.price,
       quantity: quantity,
-      color: color,
+      color: product.color,
       image: product.images[0],
     };
 
     addProductToCart(cartProduct);
     setPosted(false);
     setQuantity(1);
-    setColor(undefined);
+    // setColor(undefined);
     // console.log({ color, quantity });
   };
 
@@ -60,11 +60,11 @@ export const AddToCart = ({ product }: Props) => {
       )}
 
       {/* Selector de colores */}
-      <ColorSelector
+      {/* <ColorSelector
         selectedColor={color}
         availableColor={product.colores}
         onColorChanged={setColor}
-      />
+      /> */}
 
       {/* Selector de cantidad */}
       <QuantitySelector

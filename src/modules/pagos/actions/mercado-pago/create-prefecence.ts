@@ -6,8 +6,6 @@ const client = new MercadoPagoConfig({
   accessToken: process.env.MP_ACCESS_TOKEN!,
 });
 
-
-
 export const createPreferenceMP = async (orderId: string) => {
   const { order } = await getOrderById(orderId);
 
@@ -33,6 +31,7 @@ export const createPreferenceMP = async (orderId: string) => {
         // failure: `http://localhost:3000/orders/${orderId}`,
       },
       notification_url: `${process.env.PROD_HOST}/api/payment/${orderId}`,
+      external_reference: orderId,
     },
   });
 

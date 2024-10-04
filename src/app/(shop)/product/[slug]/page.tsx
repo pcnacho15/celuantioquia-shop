@@ -34,7 +34,7 @@ export async function generateMetadata(
       title: product?.title ?? "Producto no encontrado",
       description: product?.description ?? "",
       // images: [], // https://misitioweb.com/products/image.png
-      images: [`/products/${product?.images[1]}`],
+      images: [`/products/${product?.images[0]}`],
     },
   };
 }
@@ -51,13 +51,13 @@ export default async function ProductPage({ params }: Props) {
         {/* Slideshow Mobile */}
         <MobileSlideShow
           title={product.title}
-          images={product.images}
+          images={product.images.map((img) => img)}
           className="block md:hidden"
         />
         {/* Slideshow Desktop */}
         <SlideShow
           title={product.title}
-          images={product.images}
+          images={product.images.map((img) => img)}
           className="hidden md:block"
         />
       </div>
