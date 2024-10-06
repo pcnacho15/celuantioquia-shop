@@ -89,7 +89,7 @@ export const ProductGridItem = ({ product }: Props) => {
               {product.marca}
             </span>
             {product.bateria && (
-              <div className="flex items-center rounded bg-[#FFF8E8] shadow-md w-auto h-6 lg:h-auto lg:mr-8 pr-1">
+              <div className="flex items-center rounded w-auto h-6 lg:h-auto lg:mr-8 pr-1">
                 <MdBatteryCharging90
                   size={23}
                   className="text-lime-600"

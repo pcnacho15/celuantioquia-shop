@@ -21,11 +21,11 @@ export const MobileSlideShow = ({ images, title, className }: Props) => {
   return (
     <div className={className}>
       <Swiper
-      style={{
-        width: '100%',
-        height: '100%',
-      }}
-      pagination
+        style={{
+          width: "100%",
+          height: "100%",
+        }}
+        pagination
         autoplay={{
           delay: 2500,
         }}
@@ -39,7 +39,7 @@ export const MobileSlideShow = ({ images, title, className }: Props) => {
               height={500}
               src={`/products/${img}`}
               alt={title}
-              className="object-fill"
+              className="rounded-lg object-fill"
             />
           </SwiperSlide>
         ))}

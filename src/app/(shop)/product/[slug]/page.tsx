@@ -1,6 +1,6 @@
 import { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
-import { MobileSlideShow, SlideShow, StockLabel } from "@/modules";
+import { MobileSlideShow, SlideShow, StockLabel, Title } from "@/modules";
 import { currencyFormat, fontTitle } from "@/utils";
 import { getProductBySlug } from "@/modules/product/actions/get-product-by-slog";
 import { AddToCart } from "./ui/AddToCart";
@@ -47,7 +47,7 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <>
-      <div className="mt-5 mb-20 grid grid-cols-1 md:grid-cols-2 gap-3 w-3/4 m-auto">
+      <div className="mt-10 mb-20 grid grid-cols-1 md:grid-cols-2 gap-8 lg:w-3/4 m-auto">
         <div className="col-span-1">
           {/* Slideshow Mobile */}
           <MobileSlideShow
@@ -63,7 +63,7 @@ export default async function ProductPage({ params }: Props) {
           />
         </div>
         {/* Detalles */}
-        <div className="col-span-1 px-5 mt-20">
+        <div className="col-span-1 px-5 mt-0">
           <StockLabel slug={product.slug} />
           <h1 className={`${fontTitle.className} antialiased text-xl`}>
             {product.title}{" "}
@@ -111,7 +111,8 @@ export default async function ProductPage({ params }: Props) {
           <p className="font-light">{product.description}</p>
         </div>
       </div>
-      <div className="flex justify-center">
+      <div className="flex flex-col gap-3 justify-center px-10 md:px-5 m-auto">
+        <Title title="Otrxs han comprado" />
         <CarruselProducts products={products} />
       </div>
     </>
