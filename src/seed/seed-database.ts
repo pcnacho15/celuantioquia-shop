@@ -30,10 +30,11 @@ async function main() {
     return map;
   }, {} as Record<string, string>);
 
-  initialData.products.forEach(async ({ images, category, ...restProduct }) => {
+  initialData.products.forEach(async ({ images, category, especificaciones, ...restProduct }) => {
     const dbProduct = await prisma.product.create({
       data: {
         ...restProduct,
+        especificaciones: JSON.stringify(especificaciones),
         categoryId: categoriesMap[category],
       },
     });

@@ -2,6 +2,9 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { MdBatteryCharging90 } from "react-icons/md";
+import { BiCheckShield } from "react-icons/bi";
+import { BsShop } from "react-icons/bs";
+import { TbTruckDelivery } from "react-icons/tb";
 
 import { getProductBySlug } from "@/modules/product/actions/get-product-by-slog";
 import { CarruselProducts } from "@/modules/products/components/CarruselProducts";
@@ -118,39 +121,91 @@ export default async function ProductPage({ params }: Props) {
               </span>
             )}
           </div>
-          
+
           <AddToCart product={product} />
 
-          {/* Detalles del profucto */}
+          {/* Detalles del producto */}
           <Accordion
             type="single"
             collapsible
+            defaultValue="item-1"
             className="w-full"
           >
-            <AccordionItem value="item-1">
+            <AccordionItem
+              value="item-1"
+              autoFocus
+            >
               <AccordionTrigger>Descripción</AccordionTrigger>
               <AccordionContent>
                 <p className="font-light">{product.description}</p>
               </AccordionContent>
             </AccordionItem>
+
             <AccordionItem value="item-2">
               <AccordionTrigger>Especificaciones</AccordionTrigger>
               <AccordionContent>
-                hola
+                <ul className="list-disc">
+                  {Object.keys(product.especificaciones).map((key) => (
+                    <li key={key}>
+                      <span className="capitalize font-semibold">{key}:</span>{" "}
+                      {product.especificaciones[key]}
+                    </li>
+                  ))}
+                </ul>
               </AccordionContent>
             </AccordionItem>
-            <AccordionItem value="item-3">
+
+            {/* <AccordionItem value="item-3">
               <AccordionTrigger>Is it animated?</AccordionTrigger>
               <AccordionContent>
                 Yes. It's animated by default, but you can disable it if you
                 prefer.
               </AccordionContent>
-            </AccordionItem>
+            </AccordionItem> */}
           </Accordion>
+
+          {/* Detalles de envío */}
+          <div className="flex justify-between mt-10 border-2 border-lime-500 rounded py-4 px-6">
+            <div className="flex flex-col justify-center items-center gap-2">
+              <div className="border-2 border-lime-500 bg-lime-500 bg-opacity-25 rounded-full py-2 px-2">
+                <TbTruckDelivery
+                  size={30}
+                  className="text-lime-700"
+                />
+              </div>
+              <span className="text-gray-500 text-xs text-center underline hover:cursor-pointer">
+                Envíos a <br />
+                nivel nacional
+              </span>
+            </div>
+            <div className="flex flex-col justify-center items-center gap-2">
+              <div className="border-2 border-lime-500 bg-lime-500 bg-opacity-25 rounded-full py-2 px-2">
+                <BsShop
+                  size={30}
+                  className="text-lime-700"
+                />
+              </div>
+              <span className="text-gray-500 text-xs text-center underline hover:cursor-pointer">
+                Retira en la <br />
+                tienda
+              </span>
+            </div>
+            <div className="flex flex-col justify-center items-center gap-2">
+              <div className="border-2 border-lime-500 bg-lime-500 bg-opacity-25 rounded-full py-2 px-2">
+                <BiCheckShield
+                  size={30}
+                  className="text-lime-700"
+                />
+              </div>
+              <span className="text-gray-500 text-xs text-center underline hover:cursor-pointer">
+                Garantía por <br />6 meses
+              </span>
+            </div>
+          </div>
         </div>
       </div>
-      <div className="flex flex-col gap-3 justify-center px-10 md:px-5 m-auto">
-        <Title title="Otrxs han comprado" />
+      <div className="flex flex-col gap-8 justify-center px-10 md:px-5 m-auto">
+        <Title title="Otrxs han comprado" className="lg:ml-16" />
         <CarruselProducts products={products} />
       </div>
     </>

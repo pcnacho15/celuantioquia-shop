@@ -88,7 +88,7 @@ export const ProductGridItem = ({ product }: Props) => {
             >
               {product.marca}
             </span>
-            {product.bateria && (
+            {/* {product.bateria && (
               <div className="flex items-center rounded w-auto h-6 lg:h-auto lg:mr-8 pr-1">
                 <MdBatteryCharging90
                   size={23}
@@ -98,7 +98,7 @@ export const ProductGridItem = ({ product }: Props) => {
                   {product.bateria}%
                 </span>
               </div>
-            )}
+            )} */}
           </div>
 
           <Link
