@@ -78,7 +78,10 @@ export default async function ProductPage({ params }: Props) {
         </div>
         {/* Detalles */}
         <div className="col-span-1 px-5 mt-0">
-          <StockLabel slug={product.slug} />
+          {/* <StockLabel slug={product.slug} /> */}
+          <span className={`uppercase text-sm mb-2 ${fontTitle.className}`}>
+            {product.marca}
+          </span>
           <h1 className={`${fontTitle.className} antialiased text-xl`}>
             {product.title}{" "}
             <span className="capitalize text-base font-semibold">
@@ -205,7 +208,10 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </div>
       <div className="flex flex-col gap-8 justify-center px-10 md:px-5 m-auto">
-        <Title title="Otrxs han comprado" className="lg:ml-16" />
+        <Title
+          title="Otrxs han comprado"
+          className="lg:ml-16"
+        />
         <CarruselProducts products={products} />
       </div>
     </>
