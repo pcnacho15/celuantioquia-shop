@@ -1,14 +1,22 @@
-import { Metadata, ResolvingMetadata } from "next";
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { MobileSlideShow, SlideShow, StockLabel, Title } from "@/modules";
-import { currencyFormat, fontTitle } from "@/utils";
-import { getProductBySlug } from "@/modules/product/actions/get-product-by-slog";
-import { AddToCart } from "./ui/AddToCart";
+
 import { MdBatteryCharging90 } from "react-icons/md";
-import { LuBatteryCharging } from "react-icons/lu";
-import { RiBatteryChargeLine } from "react-icons/ri";
+
+import { getProductBySlug } from "@/modules/product/actions/get-product-by-slog";
 import { CarruselProducts } from "@/modules/products/components/CarruselProducts";
 import { getProductsRelationByMarca } from "@/modules/products/actions/product-by-relation";
+import { MobileSlideShow, SlideShow, StockLabel, Title } from "@/modules";
+import { currencyFormat, fontTitle } from "@/utils";
+
+import { AddToCart } from "./ui/AddToCart";
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 interface Props {
   params: {
@@ -41,7 +49,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ProductPage({ params }: Props) {
   const { slug } = params;
   const product = await getProductBySlug(slug);
-  const { products } = await getProductsRelationByMarca(product!.marca, product!.id);
+  const { products } = await getProductsRelationByMarca(
+    product!.marca,
+    product!.id
+  );
 
   if (!product) notFound();
 
@@ -74,16 +85,20 @@ export default async function ProductPage({ params }: Props) {
           <span className="capitalize text-base font-semibold text-gray-400 mt-1">
             {product.estado === "exhibicion" ? "exhibición" : product.estado}
           </span>
-
           {product.bateria && (
             <div className="flex items-center justify-start gap-2 rounded w-1/6 h-6 lg:h-auto lg:mr-8 pr-1 mt-5">
               <span className="text-base text-neutral-700 font-semibold">
                 Batería:{" "}
               </span>
-              <span className="text-base">{product.bateria}%</span>
+              <span className="flex flex-nowrap text-base">
+                <MdBatteryCharging90
+                  size={23}
+                  className="text-lime-600"
+                />
+                {product.bateria}%
+              </span>
             </div>
           )}
-
           <div className="flex flex-col my-5">
             <div className="flex items-center">
               <span className={`${!product.discount && "mb-5"} font-bold`}>
@@ -103,12 +118,35 @@ export default async function ProductPage({ params }: Props) {
               </span>
             )}
           </div>
-
+          
           <AddToCart product={product} />
 
-          {/* Descripción */}
-          <h3 className="font-bold text-sm">Descripción</h3>
-          <p className="font-light">{product.description}</p>
+          {/* Detalles del profucto */}
+          <Accordion
+            type="single"
+            collapsible
+            className="w-full"
+          >
+            <AccordionItem value="item-1">
+              <AccordionTrigger>Descripción</AccordionTrigger>
+              <AccordionContent>
+                <p className="font-light">{product.description}</p>
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-2">
+              <AccordionTrigger>Especificaciones</AccordionTrigger>
+              <AccordionContent>
+                hola
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-3">
+              <AccordionTrigger>Is it animated?</AccordionTrigger>
+              <AccordionContent>
+                Yes. It's animated by default, but you can disable it if you
+                prefer.
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
       </div>
       <div className="flex flex-col gap-3 justify-center px-10 md:px-5 m-auto">

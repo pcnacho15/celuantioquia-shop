@@ -17,7 +17,7 @@ export * from '@/modules/products/components/ProductGrid';
 export * from '@/modules/products/components/ProductGridItem';
 
 // actions
-export * from '@/modules/products/actions/product-pagination';
+export { getPaginatedProductsWithImages } from '@/modules/products/actions/product-pagination';
 
 // interfaces:
 export * from '@/modules/products/interfaces/Product';
@@ -44,11 +44,11 @@ export * from '@/modules/pagos/components/PaypalButton';
 export * from '@/modules/orders/components/OrderStatus';
 
 // actions
-export * from '@/modules/orders/actions/get-paginated-orders';
+export { getPaginatedOrders } from '@/modules/orders/actions/get-paginated-orders';
 
 // users
 // interfaces
 export * from '@/modules/users/interfaces/user.interface';
 // actions
 // export * from '@/modules/users/actions/change-user-role';
-export * from '@/modules/users/actions/get-paginated-users';
+export { getPaginatedUsers } from '@/modules/users/actions/get-paginated-users';

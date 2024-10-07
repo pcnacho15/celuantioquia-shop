@@ -19,9 +19,12 @@ export const getProductBySlug = async (slug: string) => {
 
     if (!product) return null;
 
+    const { especificaciones, ...resto } = product;
+
     return {
-      ...product,
+      ...resto,
       images: product.ProductImages.map((image) => image.url),
+      especificaciones: JSON.parse(especificaciones || ""),
     };
   } catch (error) {
     console.log(error);

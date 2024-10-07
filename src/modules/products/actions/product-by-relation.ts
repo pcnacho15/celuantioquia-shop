@@ -21,10 +21,13 @@ export const getProductsRelationByMarca = async (marca: ValidMarcas, id:string) 
     });
 
     return {
-      products: products.map(({ ProductImages, ...product }) => ({
-        ...product,
-        images: ProductImages.map((img) => img.url),
-      })),
+      products: products.map(
+        ({ ProductImages, especificaciones, ...product }) => ({
+          ...product,
+          especificaciones: JSON.parse(especificaciones || ""),
+          images: ProductImages.map((img) => img.url),
+        })
+      ),
     };
   } catch (error) {
     console.log(error);

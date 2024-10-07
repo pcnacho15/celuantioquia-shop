@@ -16,7 +16,7 @@ interface SeedProduct {
   color?: string;
   estado: ValidStatus;
   bateria?: number;
-  especificaciones?: InputJsonValue;
+  especificaciones?: {};
 }
 
 interface SeedUser {

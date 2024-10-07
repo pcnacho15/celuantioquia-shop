@@ -15,7 +15,7 @@ export interface Product {
   color: string | null;
   estado: string;
   bateria?: number | null;
-  especificaciones?: JsonValue;
+  especificaciones?: {};
 }
 
 export interface ProductImage {
