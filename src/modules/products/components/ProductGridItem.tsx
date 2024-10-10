@@ -9,18 +9,13 @@ import { RiShoppingBasket2Line } from "react-icons/ri";
 import { useCartStore } from "@/modules/cart";
 import { FaRegCircleCheck } from "react-icons/fa6";
 import { MdBatteryCharging90 } from "react-icons/md";
+import { sleep } from "@/utils/sleep";
 
 interface Props {
   product: Product;
 }
 
-export const sleep = (seconds: number = 1) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(true);
-    }, seconds * 1000);
-  });
-};
+
 
 export const ProductGridItem = ({ product }: Props) => {
   const [displayImage, setDisplayImage] = useState(product.images[0]);
@@ -121,7 +116,7 @@ export const ProductGridItem = ({ product }: Props) => {
           </Link>
         </div>
 
-        <div className="flex flex-col lg:flex-row items-center gap-1 md:gap-2">
+        <div className="flex flex-col xl:flex-row items-center gap-1 md:gap-2">
           <div className="flex flex-col">
             <div className="flex items-center justify-center">
               <span className={`${!product.discount && "mb-5"} font-bold`}>
@@ -144,7 +139,7 @@ export const ProductGridItem = ({ product }: Props) => {
           {posted ? (
             <button
               type="button"
-              className="fade-in flex items-center text-center text-white justify-center bg-gradient-to-r from-lime-500 to-lime-400 rounded mt-3 lg:mt-0 py-2 w-full lg:w-1/2 m-auto hover:cursor-not-allowed duration-[500ms,800ms]"
+              className="fade-in flex items-center text-center text-white justify-center bg-gradient-to-r from-lime-500 to-lime-400 rounded mt-3 lg:mt-0 py-2 w-full xl:w-1/2 m-auto hover:cursor-not-allowed duration-[500ms,800ms]"
               disabled
             >
               <div className="flex items-center justify-center m-[2.5px]">

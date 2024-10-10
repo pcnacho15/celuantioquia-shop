@@ -2,7 +2,7 @@
 
 import {
   CartProduct,
-  ColorSelector,
+  // ColorSelector,
   Product,
   QuantitySelector,
 } from "@/modules";

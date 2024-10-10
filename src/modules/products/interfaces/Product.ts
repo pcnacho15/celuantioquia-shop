@@ -48,3 +48,7 @@ export type ValidMarcas =
   | "tecno"
   | "vivo"
   | "oppo";
+
+export type ValidEstado = 
+| "nuevo"
+| "exhibicion"

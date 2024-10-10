@@ -22,7 +22,7 @@ export const TopMenu = () => {
   }, []);
 
   return (
-    <nav className="flex px-5 justify-between items-center w-full">
+    <nav className="flex fixed z-10 px-5 justify-between items-center w-full bg-gray-200">
       {/* logo */}
       <div>
         <Link href="/">
@@ -34,36 +34,36 @@ export const TopMenu = () => {
           >
             Antioquia
           </span>
-          <span className={`${fontTitle.className} antialiased`}>
+          {/* <span className={`${fontTitle.className} antialiased`}>
             {" "}
             | Tienda
-          </span>
+          </span> */}
         </Link>
       </div>
 
       {/* Opciones de Menu */}
       <div className="hidden md:block">
         <Link
-          className={`m-2 p-2 rounded-md transition-all hover:bg-gray-100 ${
-            pathActive === "/" && "bg-gray-100 text-green-600 font-semibold"
+          className={`m-2 p-2 rounded-md transition-all ${
+            pathActive === "/" && "text-lime-600 font-semibold"
           }`}
           href="/"
         >
           Inicio
         </Link>
         <Link
-          className={`m-2 p-2 rounded-md transition-all hover:bg-gray-100 ${
+          className={`m-2 p-2 rounded-md transition-all ${
             pathActive === "/categories/celulares" &&
-            "bg-gray-100 text-green-600 font-semibold"
+            "text-lime-600 font-semibold"
           }`}
           href="/categories/celulares"
         >
           Celulares
         </Link>
         <Link
-          className={`m-2 p-2 rounded-md transition-all hover:bg-gray-100 ${
+          className={`m-2 p-2 rounded-md transition-all${
             pathActive === "/categories/accesorios" &&
-            "bg-gray-100 text-green-600 font-semibold"
+            "text-lime-600 font-semibold"
           }`}
           href="/categories/accesorios"
         >

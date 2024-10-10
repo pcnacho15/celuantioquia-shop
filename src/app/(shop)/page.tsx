@@ -1,7 +1,14 @@
 export const revalidate = 60; // 60 segundos
 
 import { redirect } from "next/navigation";
-import { getPaginatedProductsWithImages, Pagination, ProductGrid, Title } from "@/modules";
+import {
+  getPaginatedProductsWithImages,
+  Pagination,
+  ProductGrid,
+  Title,
+} from "@/modules";
+import { ProductsFilter } from "@/modules/products/components/ProductsFilter";
+import { getFiltersProduct } from "@/modules/products/actions/product-filters";
 // import { initialData } from "@/seed/seed";
 
 interface Props {
@@ -13,7 +20,10 @@ interface Props {
 export default async function HomePage({ searchParams }: Props) {
   const page = searchParams.page ? parseInt(searchParams.page) : 1;
 
-  const { products, totalPages } = await getPaginatedProductsWithImages({ page });
+  const { products, totalPages } = await getPaginatedProductsWithImages({
+    page,
+  });
+  const { marcas, colores } = await getFiltersProduct();
 
   if (products.length <= 0) {
     redirect("/");
@@ -26,10 +36,13 @@ export default async function HomePage({ searchParams }: Props) {
         subtitle="Todos nuestros productos"
         className="mb-2"
       />
-
-      <ProductGrid
-        products={products}
-      />
+      <div className="flex gap-12 mt-5">
+        <ProductsFilter
+          marcas={marcas}
+          colores={colores}
+        />
+        <ProductGrid products={products} />
+      </div>
 
       <Pagination totalPages={totalPages} />
     </>
