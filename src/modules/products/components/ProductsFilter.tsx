@@ -7,7 +7,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { ValidMarcas } from "../interfaces/Product";
 import { useFilterStore } from "../store/productStore";
 
@@ -28,24 +28,37 @@ export const ProductsFilter = ({ marcas, colores }: Props) => {
   const estadosSelect = useFilterStore((state) => state.estados);
   const setEstadoFilter = useFilterStore((state) => state.setEstadoFilter);
 
-  // useEffect(() => {
-  //   setMarcaFilter(selectMarcas);
-  // }, [selectMarcas]);
 
-  // const onCheckedChange = (marca: string) => {
-  //   if (!selectMarcas.includes(marca)) {
-  //     setSelectMarcas([...selectMarcas, marca]);
-  //   } else {
-  //     setSelectMarcas(
-  //       selectMarcas.filter((marcaSelect) => marcaSelect !== marca)
-  //     );
-  //   }
+  const divRef = useRef<HTMLDivElement>(null);
 
-  //   setMarcaFilter(selectMarcas);
-  // };
+  useEffect(() => {
+    const handleScroll = () => {
+      if (divRef.current) {
+        // Verifica si el scroll está por encima de 100px
+        if (window.scrollY >= 120) {
+          divRef.current.style.top = "4rem"; // Cambiar a top 0 si scrolleas más de 100px
+        } else {
+          divRef.current.style.top = "12rem"; // Cambiar a top 50px si estás por encima de 100px
+        }
+      }
+    };
+
+    // Añadir el event listener de scroll
+    window.addEventListener("scroll", handleScroll);
+
+    // Limpiar el event listener cuando se desmonte el componente
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
 
   return (
-    <div className="hidden md:z-10 md:block md:fixed md:w-48 overflow-auto">
+    <div
+      ref={divRef}
+      className={`hidden md:z-10 md:block md:fixed md:w-48 overflow-auto transition-all duration-300`}
+      style={{ top: "12rem" }} // Posición inicial
+    >
       <Accordion
         type="multiple"
         defaultValue={["item-1", "item-2", "item-3"]}

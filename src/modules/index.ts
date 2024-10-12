@@ -1,6 +1,7 @@
 // ui
 
 // components:
+export * from '@/modules/ui/components/filter-side-bar/FilterSideBar';
 export * from '@/modules/ui/components/footer/Footer';
 export * from '@/modules/ui/components/pagination/Pagination';
 export * from '@/modules/ui/components/side-bar/SideBar';

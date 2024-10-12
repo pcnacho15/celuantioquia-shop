@@ -2,6 +2,8 @@ export const revalidate = 60; // 60 segundos
 
 import { getPaginatedProductsWithImages, Pagination, ProductGrid, Title } from "@/modules";
 import { getCategoryWithId } from "@/modules/categories";
+import { getFiltersProduct } from "@/modules/products/actions/product-filters";
+import { ProductsFilter } from "@/modules/products/components/ProductsFilter";
 import { notFound } from "next/navigation";
 
 interface Props {
@@ -23,6 +25,8 @@ export default async function CaregoryPage({ params, searchParams }: Props) {
 
   const { products, totalPages } = await getPaginatedProductsWithImages({ page, categoryId: categoryDB.id });
 
+   const { marcas, colores } = await getFiltersProduct();
+
   const labels: Record<string, string> = {
     celulares: "Celulares",
     accesorios: "Accesorios",
@@ -43,7 +47,13 @@ export default async function CaregoryPage({ params, searchParams }: Props) {
         }
       />
 
-      <ProductGrid products={products} />
+      <div className="flex gap-12 mt-5">
+        <ProductsFilter
+          marcas={marcas}
+          colores={colores}
+        />
+        <ProductGrid products={products} />
+      </div>
       <Pagination totalPages={totalPages} />
     </>
   );
