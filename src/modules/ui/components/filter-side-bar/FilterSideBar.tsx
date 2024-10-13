@@ -78,12 +78,14 @@ export const FilterSidebar = ({ colores, marcas }:Props) => {
               value="item-1"
               autoFocus
             >
-              <AccordionTrigger>Categoría</AccordionTrigger>
+              <AccordionTrigger className="text-xl mb-3">
+                Categoría
+              </AccordionTrigger>
               <AccordionContent>
                 {marcas.map((item, index) => (
                   <div
                     key={index}
-                    className="flex items-center space-x-2 mb-3"
+                    className="flex items-center space-x-2 mb-5"
                   >
                     <Checkbox
                       id={item.marca}
@@ -92,7 +94,7 @@ export const FilterSidebar = ({ colores, marcas }:Props) => {
                     />
                     <label
                       htmlFor={item.marca}
-                      className="text-sm capitalize font-medium text-gray-700 hover:cursor-pointer leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      className="text-base capitalize font-medium text-gray-700 hover:cursor-pointer leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
                       {item.marca}
                     </label>
@@ -102,12 +104,14 @@ export const FilterSidebar = ({ colores, marcas }:Props) => {
             </AccordionItem>
 
             <AccordionItem value="item-2">
-              <AccordionTrigger>Color</AccordionTrigger>
+              <AccordionTrigger className="text-xl mb-3">
+                Color
+              </AccordionTrigger>
               <AccordionContent>
                 {colores.map((item, index) => (
                   <div
                     key={`${item.color}-${index}`}
-                    className="flex items-center space-x-2 mb-3"
+                    className="flex items-center space-x-2 mb-5"
                   >
                     <Checkbox
                       id={item.color}
@@ -116,7 +120,7 @@ export const FilterSidebar = ({ colores, marcas }:Props) => {
                     />
                     <label
                       htmlFor={item.color}
-                      className="text-sm capitalize font-medium text-gray-700 hover:cursor-pointer leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      className="text-base capitalize font-medium text-gray-700 hover:cursor-pointer leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
                       {item.color}
                     </label>
@@ -126,7 +130,9 @@ export const FilterSidebar = ({ colores, marcas }:Props) => {
             </AccordionItem>
 
             <AccordionItem value="item-3">
-              <AccordionTrigger className="text-xl mb-3">Estado</AccordionTrigger>
+              <AccordionTrigger className="text-xl mb-3">
+                Estado
+              </AccordionTrigger>
               <AccordionContent>
                 {estados.map((item, index) => (
                   <div

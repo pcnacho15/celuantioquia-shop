@@ -8,7 +8,7 @@ import { fontTitle } from "@/utils";
 import { useUiStore } from "@/modules";
 import { BsBasket3 } from "react-icons/bs";
 import { useCartStore } from "@/modules/cart";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GrBasket } from "react-icons/gr";
 
 export const TopMenu = () => {
@@ -17,12 +17,35 @@ export const TopMenu = () => {
   const pathActive = usePathname();
   const [loaded, setLoaded] = useState(false);
 
+  const [isScrolled, setIsScrolled] = useState(false);
+
   useEffect(() => {
+
     setLoaded(true);
+
+    const handleScroll = () => {
+      if (window.scrollY >= 10) {
+        setIsScrolled(true); // Si el scroll es mayor o igual a 10
+      } else {
+        setIsScrolled(false); // Si el scroll es menor a 10
+      }
+    };
+
+    // Agregar el listener de scroll
+    window.addEventListener("scroll", handleScroll);
+
+    // Limpiar el listener cuando el componente se desmonte
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   return (
-    <nav className="flex fixed z-10 px-5 justify-between items-center w-full bg-gray-200">
+    <nav
+      className={`flex fixed z-10 px-5 justify-between items-center w-full transition-all duration-300 ${
+        isScrolled ? "bg-white/30 backdrop-blur-md" : "bg-none"
+      }`}
+    >
       {/* logo */}
       <div>
         <Link href="/">

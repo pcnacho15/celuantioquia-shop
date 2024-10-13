@@ -53,7 +53,7 @@
 
 
 .btn-primary {
-  @apply flex items-center text-center justify-center bg-gradient-to-r from-lime-700 to-lime-600 rounded mt-3 lg:mt-0 py-2 w-full xl:w-1/2 m-auto text-white font-semibold hover:cursor-pointer shadow-md;
+  @apply flex items-center text-center justify-center bg-gradient-to-r from-lime-700 to-lime-600 rounded-sm mt-3 lg:mt-0 py-2 w-full xl:w-1/2 m-auto text-white font-semibold hover:cursor-pointer shadow-md;
 }
 
 .btn-secondary {
