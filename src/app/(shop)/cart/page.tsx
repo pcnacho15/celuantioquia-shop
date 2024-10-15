@@ -1,8 +1,9 @@
 import { Title } from "@/modules";
-import { initialData } from "@/seed/seed";
+// import { initialData } from "@/seed/seed";
 import Link from "next/link";
 import { ProductsInCart } from "./ui/ProductsInCart";
 import { OrderSummary } from "./ui/OrderSummary";
+import { fontTitle } from "@/utils";
 
 export default function CartPage() {
   return (
@@ -26,7 +27,13 @@ export default function CartPage() {
           </div>
           {/* Checkout */}
           <div className="bg-white rounded-xl shadow-xl p-7 h-fit">
-            <h2 className="text-2xl font-semi-bold mb-2">Resumen de mi orden</h2>
+            <h2
+              className={`text-2xl font-semibold mb-2 ${fontTitle.className}`}
+            >
+              Resumen de mi orden
+            </h2>
+            {/* Separador */}
+            <div className="w-full h-px bg-gray-200 my-5"></div>
             <OrderSummary />
           </div>
         </div>

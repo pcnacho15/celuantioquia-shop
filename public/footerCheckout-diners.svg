@@ -1,0 +1,7 @@
+<svg data-testid="master" viewBox="0 0 24 24" fill="none"
+    xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mastercard" class="svelte-1ccs7l7 medium-3ks-un">
+    <title>Mastercard</title>
+    <ellipse cx="8.16777" cy="12" rx="6.16777" ry="6" fill="#EA001B"></ellipse>
+    <ellipse cx="15.8321" cy="12" rx="6.16777" ry="6" fill="#F79F1A"></ellipse>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M12.0003 16.7023C13.4234 15.6032 14.336 13.9056 14.336 12.0006C14.336 10.0956 13.4234 8.39794 12.0003 7.29883C10.5772 8.39794 9.66455 10.0956 9.66455 12.0006C9.66455 13.9056 10.5772 15.6032 12.0003 16.7023Z" fill="#FF5F01"></path>
+</svg>

@@ -1,4 +1,4 @@
-import { FilterSidebar, Footer, Sidebar, TopMenu } from "@/modules";
+import { Footer, Sidebar, TopMenu } from "@/modules";
 import { ProductFilterMenu } from "@/modules/products/components/ProductFilterMenu";
 
 export default function ShopLayout({
