@@ -53,7 +53,7 @@ export const OrderSummary = () => {
       <div className="mt-8 w-full">
         {totalItems > 0 ? (
           <Link
-            className={`flex items-center justify-center gap-2 bg-green-700 hover:bg-green-800 text-gray-50 py-2 px-4 rounded-sm transition-all w-full`}
+            className={`flex items-center justify-center gap-2 bg-gradient-to-r from-lime-700 to-lime-600 text-gray-50 py-2 px-4 rounded-sm transition-all w-full`}
             href="/checkout/address"
           >
             <TbLockDollar
