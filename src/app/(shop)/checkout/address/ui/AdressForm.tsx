@@ -22,9 +22,9 @@ export const AdressForm = () => {
   const setAdress = useAdresStore((state) => state.setAdress);
   const getAdress = useAdresStore((state) => state.getAdress);
 
-  useSession({
-    required: true,
-  });
+  // useSession({
+  //   required: true,
+  // });
 
   const {
     handleSubmit,
@@ -52,8 +52,21 @@ export const AdressForm = () => {
       onSubmit={handleSubmit(onSubmit)}
       className="grid grid-cols-1 gap-2 sm:gap-5 sm:grid-cols-2"
     >
+      <div className="flex flex-col mb-2 col-span-2">
+        <span className="after:content-['*'] after:ml-0.5 after:text-red-500">
+          Correo
+        </span>
+        <input
+          type="text"
+          className="p-2 border rounded-md bg-gray-200"
+          {...register("nombres", { required: true })}
+        />
+      </div>
+      
       <div className="flex flex-col mb-2">
-        <span>Nombres</span>
+        <span className="after:content-['*'] after:ml-0.5 after:text-red-500">
+          Nombres
+        </span>
         <input
           type="text"
           className="p-2 border rounded-md bg-gray-200"
@@ -62,12 +75,27 @@ export const AdressForm = () => {
       </div>
 
       <div className="flex flex-col mb-2">
-        <span>Apellidos</span>
+        <span className="after:content-['*'] after:ml-0.5 after:text-red-500">
+          Apellidos
+        </span>
         <input
           type="text"
           className="p-2 border rounded-md bg-gray-200"
           {...register("apellidos", { required: true })}
         />
+      </div>
+
+      <div className="flex flex-col mb-2">
+        <span>Tipo Documento</span>
+        <select
+          className="p-2 border rounded-md bg-gray-200"
+          {...register("pais", { required: true })}
+        >
+          <option value="">[ Seleccione ]</option>
+          <option value="CC">Cédula de ciudadanía</option>
+          <option value="CE">Cédula de extranjería</option>
+          <option value="TI">Tarjeta Identidad</option>
+        </select>
       </div>
 
       <div className="flex flex-col mb-2">

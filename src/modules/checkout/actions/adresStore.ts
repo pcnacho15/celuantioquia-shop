@@ -3,8 +3,12 @@ import { persist } from "zustand/middleware";
 
 interface State {
   adress: {
+    correo:string;
     nombres: string;
     apellidos: string;
+    celular: string;
+    tipoDocumento: string;
+    numeroDocumento: string;
     direccion: string;
     direccion2?: string;
     codigoPostal: string;
@@ -22,14 +26,102 @@ export const useAdresStore = create<State>()(
   persist(
     (set, get) => ({
       adress: {
-        nombres: "",
-        apellidos: "",
-        direccion: "",
-        direccion2: "",
-        codigoPostal: "",
-        ciudad: "",
-        pais: "",
-        telefono: "",
+        correo
+nombres
+apellidos
+celular
+tipoDocumento
+numeroDocumento
+direccion
+direccion2
+codigoPostal
+ciudad
+pais
+telefono
+        correo
+nombres
+apellidos
+celular
+tipoDocumento
+numeroDocumento
+direccion
+direccion2
+codigoPostal
+ciudad
+pais
+telefono
+        correo
+nombres
+apellidos
+celular
+tipoDocumento
+numeroDocumento
+direccion
+direccion2
+codigoPostal
+ciudad
+pais
+telefono
+        correo
+nombres
+apellidos
+celular
+tipoDocumento
+numeroDocumento
+direccion
+direccion2
+codigoPostal
+ciudad
+pais
+telefono
+        correo
+nombres
+apellidos
+celular
+tipoDocumento
+numeroDocumento
+direccion
+direccion2
+codigoPostal
+ciudad
+pais
+telefono
+        correo
+nombres
+apellidos
+celular
+tipoDocumento
+numeroDocumento
+direccion
+direccion2
+codigoPostal
+ciudad
+pais
+telefono
+        correo
+nombres
+apellidos
+celular
+tipoDocumento
+numeroDocumento
+direccion
+direccion2
+codigoPostal
+ciudad
+pais
+telefono
+        correo
+nombres
+apellidos
+celular
+tipoDocumento
+numeroDocumento
+direccion
+direccion2
+codigoPostal
+ciudad
+pais
+telefono
       },
       setAdress: (adress) => {
         set({ adress });
