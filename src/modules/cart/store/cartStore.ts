@@ -44,7 +44,8 @@ export const useCartStore = create<State>()(
           0
         );
         const tax = subTotal * 0.15;
-        const total = subTotal + tax;
+        // const total = subTotal + tax;
+        const total = subTotal;
 
         return {
           totalItems,

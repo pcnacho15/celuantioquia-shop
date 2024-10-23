@@ -1,23 +1,42 @@
 "use client";
-import { useAdresStore } from "@/modules/checkout/actions/adresStore";
+
+import { getDepartmentById } from "@/modules/checkout/actions/get-departments";
+import { getMunicipioById } from "@/modules/checkout/actions/get-municipios";
+import { Departamento, Municipio } from "@/modules/checkout/interfaces/Adress";
+import { useAdresStore } from "@/modules/checkout/store/adresStore";
+import { fontTitle } from "@/utils";
 import clsx from "clsx";
 // import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 interface FormInputs {
+  correo: string;
   nombres: string;
   apellidos: string;
+  celular: string;
+  tipoDocumento: string;
+  numeroDocumento: string;
+  departamento: number;
+  municipio: number;
   direccion: string;
-  direccion2?: string;
-  codigoPostal: string;
-  ciudad: string;
-  pais: string;
+  direccion2: string;
+  // codigoPostal: string;
+  // ciudad: string;
   telefono: string;
 }
 
-export const AdressForm = () => {
+interface Props {
+  departamentos: Departamento[];
+  municipios: Municipio[];
+}
+
+export const AdressForm = ({ departamentos, municipios }: Props) => {
+
+  // console.log(municipios)
+  const [municipioSelect, setMunicipioSelect] = useState<Municipio[]>([]);
+
   const router = useRouter();
   const setAdress = useAdresStore((state) => state.setAdress);
   const getAdress = useAdresStore((state) => state.getAdress);
@@ -30,129 +49,245 @@ export const AdressForm = () => {
     handleSubmit,
     register,
     formState: { isValid },
+    watch,
     reset,
   } = useForm<FormInputs>();
 
+  const valueDepartamento = watch('departamento');
+
   useEffect(() => {
-    const adress = getAdress();
+
+    // console.log(municipios)
+
+    setMunicipioSelect(
+      municipios.filter((m) => m.departamentoId === Number(valueDepartamento))
+    );
+
+  
+  }, [valueDepartamento])
+  
+
+
+  useEffect(() => {
+    let adress = getAdress();
+
+    // const departamento= Number(adress.departamento);
+    // const municipio = Number(adress.municipio);
+    
+    const {departamento, municipio, ...resto} = adress
+    
+    const departmentFound = departamentos.find(d => d.nombre === departamento);
+    const municipioFound = municipios.find(m => m.nombre === municipio);
 
     if (adress.nombres) {
-      reset(adress);
+      reset({
+        ...resto,
+        departamento: departmentFound?.id,
+        municipio: municipioFound?.id,
+      });
     }
   }, []);
 
-  const onSubmit: SubmitHandler<FormInputs> = (data) => {
-    setAdress(data);
+  const onSubmit: SubmitHandler<FormInputs> = async(data) => {
+    const { departamento, municipio, ...resto } = data;
+    const departmentById = await getDepartmentById(Number(departamento));
+    const municipioById = await getMunicipioById( Number(municipio) );
 
+    // console.log(departmentById?.nombre)
+
+    setAdress({
+      ...resto,
+      departamento: departmentById!.nombre,
+      municipio: municipioById!.nombre,
+    });
     router.replace("/checkout");
   };
+
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="grid grid-cols-1 gap-2 sm:gap-5 sm:grid-cols-2"
+      className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-3"
     >
-      <div className="flex flex-col mb-2 col-span-2">
-        <span className="after:content-['*'] after:ml-0.5 after:text-red-500">
+      <div className="flex flex-col mb-2">
+        <span
+          className={`text-gray-500 font-semibold ${fontTitle.className} after:content-['*'] after:ml-0.5 after:text-red-500`}
+        >
           Correo
         </span>
         <input
           type="text"
           className="p-2 border rounded-md bg-gray-200"
-          {...register("nombres", { required: true })}
-        />
-      </div>
-      
-      <div className="flex flex-col mb-2">
-        <span className="after:content-['*'] after:ml-0.5 after:text-red-500">
-          Nombres
-        </span>
-        <input
-          type="text"
-          className="p-2 border rounded-md bg-gray-200"
-          {...register("nombres", { required: true })}
+          {...register("correo", { required: true })}
         />
       </div>
 
       <div className="flex flex-col mb-2">
-        <span className="after:content-['*'] after:ml-0.5 after:text-red-500">
-          Apellidos
-        </span>
-        <input
-          type="text"
-          className="p-2 border rounded-md bg-gray-200"
-          {...register("apellidos", { required: true })}
-        />
-      </div>
-
-      <div className="flex flex-col mb-2">
-        <span>Tipo Documento</span>
-        <select
-          className="p-2 border rounded-md bg-gray-200"
-          {...register("pais", { required: true })}
+        <span
+          className={`text-gray-500 font-semibold ${fontTitle.className} after:content-['*'] after:ml-0.5 after:text-red-500`}
         >
-          <option value="">[ Seleccione ]</option>
-          <option value="CC">Cédula de ciudadanía</option>
-          <option value="CE">Cédula de extranjería</option>
-          <option value="TI">Tarjeta Identidad</option>
-        </select>
-      </div>
-
-      <div className="flex flex-col mb-2">
-        <span>Dirección</span>
-        <input
-          type="text"
-          className="p-2 border rounded-md bg-gray-200"
-          {...register("direccion", { required: true })}
-        />
-      </div>
-
-      <div className="flex flex-col mb-2">
-        <span>Dirección 2 (opcional)</span>
-        <input
-          type="text"
-          className="p-2 border rounded-md bg-gray-200"
-          {...register("direccion2", { required: true })}
-        />
-      </div>
-
-      <div className="flex flex-col mb-2">
-        <span>Código postal</span>
-        <input
-          type="text"
-          className="p-2 border rounded-md bg-gray-200"
-          {...register("codigoPostal", { required: true })}
-        />
-      </div>
-
-      <div className="flex flex-col mb-2">
-        <span>Ciudad</span>
-        <input
-          type="text"
-          className="p-2 border rounded-md bg-gray-200"
-          {...register("ciudad", { required: true })}
-        />
-      </div>
-
-      <div className="flex flex-col mb-2">
-        <span>País</span>
-        <select
-          className="p-2 border rounded-md bg-gray-200"
-          {...register("pais", { required: true })}
-        >
-          {/* <option value="">[ Seleccione ]</option> */}
-          <option value="COL">Colombia</option>
-        </select>
-      </div>
-
-      <div className="flex flex-col mb-2">
-        <span>Teléfono</span>
+          Celular
+        </span>
         <input
           type="text"
           className="p-2 border rounded-md bg-gray-200"
           {...register("telefono", { required: true })}
         />
       </div>
+
+      <div className="flex flex-col mb-2">
+        <span
+          className={`text-gray-500 font-semibold ${fontTitle.className} after:content-['*'] after:ml-0.5 after:text-red-500`}
+        >
+          Nombres
+        </span>
+        <input
+          type="text"
+          className="p-2 border rounded-md bg-gray-200 capitalize"
+          {...register("nombres", { required: true })}
+        />
+      </div>
+
+      <div className="flex flex-col mb-2">
+        <span
+          className={`text-gray-500 font-semibold ${fontTitle.className} after:content-['*'] after:ml-0.5 after:text-red-500`}
+        >
+          Apellidos
+        </span>
+        <input
+          type="text"
+          className="p-2 border rounded-md bg-gray-200 capitalize"
+          {...register("apellidos", { required: true })}
+        />
+      </div>
+
+      <div className="flex flex-col mb-2">
+        <span
+          className={`text-gray-500 font-semibold ${fontTitle.className} after:content-['*'] after:ml-0.5 after:text-red-500`}
+        >
+          Tipo Documento
+        </span>
+        <select
+          defaultValue={""}
+          className="p-2 border rounded-md bg-gray-200 text-gray-600"
+          {...register("tipoDocumento", { required: true })}
+        >
+          <option
+            value=""
+            disabled
+          >
+            Elija un tipo de documento
+          </option>
+          <option value="CC">Cédula de ciudadanía</option>
+          <option value="CE">Cédula de extranjería</option>
+          <option value="TI">Tarjeta identidad</option>
+        </select>
+      </div>
+
+      <div className="flex flex-col mb-2">
+        <span
+          className={`text-gray-500 font-semibold ${fontTitle.className} after:content-['*'] after:ml-0.5 after:text-red-500`}
+        >
+          Número de documento
+        </span>
+        <input
+          type="text"
+          className="p-2 border rounded-md bg-gray-200"
+          {...register("numeroDocumento", { required: true })}
+        />
+      </div>
+
+      <div className="flex flex-col mb-2">
+        <span
+          className={`text-gray-500 font-semibold ${fontTitle.className} after:content-['*'] after:ml-0.5 after:text-red-500`}
+        >
+          Departamento
+        </span>
+        <select
+          defaultValue={""}
+          className="p-2 border rounded-md bg-gray-200 text-gray-600 capitalize"
+          {...register("departamento", { required: true })}
+        >
+          <option
+            value=""
+            disabled
+          >
+            Seleccione un departamento
+          </option>
+          {departamentos.map((d) => (
+            <option
+              key={d.id}
+              value={d.id}
+            >
+              {d.nombre}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="flex flex-col mb-2">
+        <span
+          className={`text-gray-500 font-semibold ${fontTitle.className} after:content-['*'] after:ml-0.5 after:text-red-500`}
+        >
+          Municipio
+        </span>
+        <select
+          defaultValue={""}
+          className="p-2 border rounded-md bg-gray-200 text-gray-600 capitalize"
+          {...register("municipio", { required: true })}
+        >
+          <option
+            value=""
+            disabled
+          >
+            Seleccione un Municipio
+          </option>
+          {municipioSelect.map((m) => (
+            <option
+              key={m.id}
+              value={m.id}
+              className="capitalize"
+            >
+              {m.nombre}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="flex flex-col mb-2">
+        <span
+          className={`text-gray-500 font-semibold ${fontTitle.className} after:content-['*'] after:ml-0.5 after:text-red-500`}
+        >
+          Dirección
+        </span>
+        <input
+          placeholder="Ej: Carrera 24A # 83-15"
+          type="text"
+          className="p-2 border rounded-md bg-gray-200 capitalize"
+          {...register("direccion", { required: true })}
+        />
+      </div>
+
+      <div className="flex flex-col mb-2">
+        <span className={`text-gray-500 font-semibold ${fontTitle.className}`}>
+          Información adicional (ej: apto 201)
+        </span>
+        <input
+          placeholder="Barrio, edificio, apto, casa, etc. (opcional)"
+          type="text"
+          className="p-2 border rounded-md bg-gray-200"
+          {...register("direccion2", { required: false })}
+        />
+      </div>
+
+      {/* <div className="flex flex-col mb-2">
+        <span>Código postal</span>
+        <input
+          type="text"
+          className="p-2 border rounded-md bg-gray-200"
+          {...register("codigoPostal", { required: true })}
+        />
+      </div> */}
 
       <div className="flex flex-col mb-2 mt-5">
         {/* <div className="inline-flex items-center mb-10">
@@ -190,8 +325,9 @@ export const AdressForm = () => {
           //   href="/checkout"
           type="submit"
           disabled={!isValid}
-          className={clsx("flex w-full sm:w-1/2 justify-center ", {
-            "btn-primary": isValid,
+          className={clsx("flex w-full sm:w-1/2 justify-center", {
+            "flex items-center text-center justify-center bg-gradient-to-r from-lime-700 to-lime-600 rounded-sm mt-3 lg:mt-0 py-2 w-full text-white font-semibold hover:cursor-pointer shadow-md":
+              isValid,
             "btn-disabled": !isValid,
           })}
         >

@@ -124,17 +124,37 @@ model OrderItem {
 }
 
 model OrderAdress {
-  id           String  @id @default(uuid())
-  nombres      String
-  apellidos    String
-  direccion    String
-  direccion2   String?
-  codigoPostal String
-  ciudad       String
-  pais         String
-  telefono     String
+  id              String @id @default(uuid())
+  correo          String
+  nombres         String
+  apellidos       String
+  tipoDocumento   String
+  numeroDocumento String
+  departamento    String
+  municipio       String
+  direccion       String
+  direccion2      String?
+  // codigoPostal    String
+  // ciudad          String
+  // pais            String
+  telefono        String
 
   // Relaciones
   order   Order  @relation(fields: [orderId], references: [id])
   orderId String @unique
+}
+
+model Departamento {
+  id        Int         @id
+  nombre    String
+  Municipio Municipio[]
+}
+
+model Municipio {
+  id     Int    @id
+  nombre String
+
+  // Relaciones
+  departamento   Departamento @relation(fields: [departamentoId], references: [id])
+  departamentoId Int
 }

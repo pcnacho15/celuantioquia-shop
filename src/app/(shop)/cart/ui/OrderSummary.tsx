@@ -36,10 +36,10 @@ export const OrderSummary = () => {
           {currencyFormat(subTotal)}
         </span>
 
-        <span className={`${fontTitle.className} mb-2`}>Impuestos (15%)</span>
+        {/* <span className={`${fontTitle.className} mb-2`}>Impuestos (15%)</span>
         <span className={`text-right mb-2 ${fontTitle.className}`}>
           {currencyFormat(tax)}
-        </span>
+        </span> */}
 
         <div className="flex justify-between flex-col flex-wrap mt-5 w-full">
           <span className={`mt-5 text-2xl ${fontTitle.className}`}>

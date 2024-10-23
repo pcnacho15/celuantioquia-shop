@@ -1,3 +1,13 @@
+export interface Departamento {
+  id: number;
+  nombre: string;
+}
+
+export interface Municipio {
+  id: number;
+  nombre: string;
+  departamentoId: number;
+}
 
 export interface Adress {
 //   id: string;
@@ -5,8 +15,13 @@ export interface Adress {
   apellidos: string;
   direccion: string;
   direccion2?: string;
-  codigoPostal: string;
-  ciudad: string;
-  pais: string;
   telefono: string;
+  correo: string;
+  numeroDocumento: string;
+  tipoDocumento: string;
+  departamento: string;
+  municipio: string;
+  // codigoPostal: string;
+  // ciudad: string;
+  // pais: string;
 }
