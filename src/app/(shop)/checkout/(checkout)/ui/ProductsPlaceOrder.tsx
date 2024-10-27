@@ -1,7 +1,7 @@
 "use client";
 
 import { useCartStore } from "@/modules/cart";
-import { currencyFormat } from "@/utils";
+import { currencyFormat, fontTitle } from "@/utils";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -23,7 +23,7 @@ export const ProductsPlaceOrder = () => {
       {productsInCart.map((p) => (
         <div
           key={`${p.slug}-${p.color}`}
-          className="flex my-3 py-5 px-2 shadow-md bg-white rounded"
+          className="flex my-3 py-5 px-2 shadow-md bg-white rounded-md"
         >
           <Image
             src={`/products/${p.image}`}
@@ -38,12 +38,14 @@ export const ProductsPlaceOrder = () => {
           />
 
           <div className="flex flex-col justify-start items-start">
-            <span className="font-semibold text-sm">
-              <p>{p.title} ({p.quantity})</p>
+            <span className="text-base">
+              <p className={`text-lg ${fontTitle.className}`}>
+                {p.title} ({p.quantity})
+              </p>
             </span>
-            <p className="capitalize text-sm mt-1 underline mb-2">{p.color}</p>
-            <p className="mb-2">
-              Subtotal: {''}
+            <p className="capitalize mt-1 mb-2 text-base">({p.color})</p>
+            <p className={`mb-2 mt-3 ${fontTitle.className} text-lg`}>
+              Subtotal: {""}
               {currencyFormat(p.price * p.quantity)}
             </p>
           </div>

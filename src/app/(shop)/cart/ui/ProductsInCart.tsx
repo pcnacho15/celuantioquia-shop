@@ -2,9 +2,11 @@
 
 import { QuantitySelector } from "@/modules";
 import { useCartStore } from "@/modules/cart";
+import { currencyFormat, fontTitle } from "@/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { BsCartX } from "react-icons/bs";
 import { TbTrash } from "react-icons/tb";
 
 export const ProductsInCart = () => {
@@ -13,6 +15,7 @@ export const ProductsInCart = () => {
   const productsInCart = useCartStore((state) => state.cart);
   const updateProductQuantity = useCartStore((state) => state.updateProductQuantity);
   const removeProduct = useCartStore((state) => state.removeProduct);
+  const { totalItems } = useCartStore(state => state.getSummaryProducts())
 
   useEffect(() => {
     setLoaded(true);
@@ -22,12 +25,23 @@ export const ProductsInCart = () => {
     return <p>Cargando...</p>;
   }
 
+  if (totalItems <= 0) {
+   return (
+     <div className="flex h-56 flex-col items-center justify-center gap-5 mt-10">
+       <BsCartX size={80} />
+       <span className={`text-xl text-center ${fontTitle.className} font-semibold`}>
+         Upps!! <br /> Parece que tienes tu carrito de compras vacío
+       </span>
+     </div>
+   ); 
+  }
+
   return (
     <>
       {productsInCart.map((p) => (
         <div
           key={`${p.slug}-${p.color}`}
-          className="flex md:items-start my-3 py-5 shadow-md rounded w-auto bg-white"
+          className="flex md:items-start my-3 py-5 shadow-md rounded-md w-auto bg-white"
         >
           <Image
             src={`/products/${p.image}`}
@@ -43,17 +57,14 @@ export const ProductsInCart = () => {
 
           <div className="flex flex-col md:justify-start md:items-start text-sm">
             <Link
-              className="hover:underline font-semibold"
+              className="hover:text-lime-600"
               href={`/product/${p.slug}`}
             >
-              <p>{p.title}</p>
+              <p className={`text-lg ${fontTitle.className}`}>{p.title}</p>
             </Link>
-            <p className="capitalize mb-2">{p.color}</p>
-            <p className="mb-2">
-              {new Intl.NumberFormat("co-CO", {
-                style: "currency",
-                currency: "COP",
-              }).format(p.price)}
+            <p className="capitalize text-base mb-2">({p.color})</p>
+            <p className={`mb-2 text-lg ${fontTitle.className}`}>
+              {currencyFormat(p.price)}
             </p>
 
             <div className="flex items-center gap-5 md:gap-8 mt-3">

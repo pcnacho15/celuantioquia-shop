@@ -33,7 +33,6 @@ interface Props {
 }
 
 export const AdressForm = ({ departamentos, municipios }: Props) => {
-
   // console.log(municipios)
   const [municipioSelect, setMunicipioSelect] = useState<Municipio[]>([]);
 
@@ -48,50 +47,44 @@ export const AdressForm = ({ departamentos, municipios }: Props) => {
   const {
     handleSubmit,
     register,
-    formState: { isValid },
+    formState: { isValid, errors },
     watch,
     reset,
   } = useForm<FormInputs>();
 
-  const valueDepartamento = watch('departamento');
+  const valueDepartamento = watch("departamento");
+
+  // console.log(isValid);
 
   useEffect(() => {
-
-    // console.log(municipios)
-
     setMunicipioSelect(
       municipios.filter((m) => m.departamentoId === Number(valueDepartamento))
     );
-
-  
-  }, [valueDepartamento])
-  
-
-
-  useEffect(() => {
     let adress = getAdress();
 
     // const departamento= Number(adress.departamento);
     // const municipio = Number(adress.municipio);
-    
-    const {departamento, municipio, ...resto} = adress
-    
-    const departmentFound = departamentos.find(d => d.nombre === departamento);
-    const municipioFound = municipios.find(m => m.nombre === municipio);
+
+    const { departamento, municipio, ...resto } = adress;
+
+    const departmentFound = departamentos.find(
+      (d) => d.nombre === departamento
+    );
+    const municipioFound = municipios.find((m) => m.nombre === municipio);
 
     if (adress.nombres) {
       reset({
         ...resto,
-        departamento: departmentFound?.id,
-        municipio: municipioFound?.id,
+        departamento: departmentFound!.id,
+        municipio: municipioFound!.id,
       });
     }
-  }, []);
+  }, [valueDepartamento]);
 
-  const onSubmit: SubmitHandler<FormInputs> = async(data) => {
+  const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     const { departamento, municipio, ...resto } = data;
     const departmentById = await getDepartmentById(Number(departamento));
-    const municipioById = await getMunicipioById( Number(municipio) );
+    const municipioById = await getMunicipioById(Number(municipio));
 
     // console.log(departmentById?.nombre)
 
@@ -102,7 +95,6 @@ export const AdressForm = ({ departamentos, municipios }: Props) => {
     });
     router.replace("/checkout");
   };
-
 
   return (
     <form
@@ -116,10 +108,21 @@ export const AdressForm = ({ departamentos, municipios }: Props) => {
           Correo
         </span>
         <input
-          type="text"
-          className="p-2 border rounded-md bg-gray-200"
-          {...register("correo", { required: true })}
+          type="email"
+          placeholder="correo@mail.com"
+          className={clsx("p-2 border rounded-md bg-gray-200", {
+            "border-2 border-rose-500": errors.correo,
+          })}
+          {...register("correo", {
+            required:
+              "El correo debe ser obligatorio, allí enviaremos la factura de tu compra",
+          })}
         />
+        {errors.correo && (
+          <span className={`text-sm text-red-500 ${fontTitle.className}`}>
+            {errors.correo.message}
+          </span>
+        )}
       </div>
 
       <div className="flex flex-col mb-2">
@@ -130,9 +133,24 @@ export const AdressForm = ({ departamentos, municipios }: Props) => {
         </span>
         <input
           type="text"
-          className="p-2 border rounded-md bg-gray-200"
-          {...register("telefono", { required: true })}
+          placeholder="Ej: 30548732..."
+          className={clsx("p-2 border rounded-md bg-gray-200", {
+            "border-2 border-rose-500": errors.telefono,
+          })}
+          {...register("telefono", {
+            required:
+              "El número de celular es requerido para realizar el envío",
+            minLength: {
+              value: 10,
+              message: "El número de celular ingresado no es correcto",
+            },
+          })}
         />
+        {errors.telefono && (
+          <span className={`text-sm text-red-500 ${fontTitle.className}`}>
+            {errors.telefono.message}
+          </span>
+        )}
       </div>
 
       <div className="flex flex-col mb-2">
@@ -143,9 +161,18 @@ export const AdressForm = ({ departamentos, municipios }: Props) => {
         </span>
         <input
           type="text"
-          className="p-2 border rounded-md bg-gray-200 capitalize"
-          {...register("nombres", { required: true })}
+          className={clsx("p-2 border rounded-md bg-gray-200", {
+            "border-2 border-rose-500": errors.nombres,
+          })}
+          {...register("nombres", {
+            required: "El nombre es un campo requerido para realizar el envío",
+          })}
         />
+        {errors.nombres && (
+          <span className={`text-sm text-red-500 ${fontTitle.className}`}>
+            {errors.nombres.message}
+          </span>
+        )}
       </div>
 
       <div className="flex flex-col mb-2">
@@ -156,9 +183,19 @@ export const AdressForm = ({ departamentos, municipios }: Props) => {
         </span>
         <input
           type="text"
-          className="p-2 border rounded-md bg-gray-200 capitalize"
-          {...register("apellidos", { required: true })}
+          className={clsx("p-2 border rounded-md bg-gray-200", {
+            "border-2 border-rose-500": errors.apellidos,
+          })}
+          {...register("apellidos", {
+            required:
+              "El apellido es un campo requerido para realizar el envío",
+          })}
         />
+        {errors.apellidos && (
+          <span className={`text-sm text-red-500 ${fontTitle.className}`}>
+            {errors.apellidos.message}
+          </span>
+        )}
       </div>
 
       <div className="flex flex-col mb-2">
@@ -169,8 +206,13 @@ export const AdressForm = ({ departamentos, municipios }: Props) => {
         </span>
         <select
           defaultValue={""}
-          className="p-2 border rounded-md bg-gray-200 text-gray-600"
-          {...register("tipoDocumento", { required: true })}
+          // className="p-2 border rounded-md bg-gray-200 text-gray-600"
+          className={clsx("p-2 border rounded-md bg-gray-200 text-gray-600", {
+            "border-2 border-rose-500": errors.tipoDocumento,
+          })}
+          {...register("tipoDocumento", {
+            required: "Selecciona un tipo de documento",
+          })}
         >
           <option
             value=""
@@ -182,6 +224,11 @@ export const AdressForm = ({ departamentos, municipios }: Props) => {
           <option value="CE">Cédula de extranjería</option>
           <option value="TI">Tarjeta identidad</option>
         </select>
+        {errors.tipoDocumento && (
+          <span className={`text-sm text-red-500 ${fontTitle.className}`}>
+            {errors.tipoDocumento.message}
+          </span>
+        )}
       </div>
 
       <div className="flex flex-col mb-2">
@@ -192,9 +239,21 @@ export const AdressForm = ({ departamentos, municipios }: Props) => {
         </span>
         <input
           type="text"
-          className="p-2 border rounded-md bg-gray-200"
-          {...register("numeroDocumento", { required: true })}
+          placeholder="Ej: 100306..."
+          className={clsx("p-2 border rounded-md bg-gray-200", {
+            "border-2 border-rose-500": errors.numeroDocumento,
+          })}
+          {...register("numeroDocumento", {
+            required:
+              "El número de documento es requerido para generar la factura de tu compra",
+            minLength: 10,
+          })}
         />
+        {errors.numeroDocumento && (
+          <span className={`text-sm text-red-500 ${fontTitle.className}`}>
+            {errors.numeroDocumento.message}
+          </span>
+        )}
       </div>
 
       <div className="flex flex-col mb-2">
@@ -205,8 +264,16 @@ export const AdressForm = ({ departamentos, municipios }: Props) => {
         </span>
         <select
           defaultValue={""}
-          className="p-2 border rounded-md bg-gray-200 text-gray-600 capitalize"
-          {...register("departamento", { required: true })}
+          // className="p-2 border rounded-md bg-gray-200 text-gray-600 capitalize"
+          className={clsx(
+            "p-2 border rounded-md bg-gray-200 text-gray-600 capitalize",
+            {
+              "border-2 border-rose-500": errors.departamento,
+            }
+          )}
+          {...register("departamento", {
+            required: "Selecciona tu departamento de residencia",
+          })}
         >
           <option
             value=""
@@ -223,6 +290,11 @@ export const AdressForm = ({ departamentos, municipios }: Props) => {
             </option>
           ))}
         </select>
+        {errors.departamento && (
+          <span className={`text-sm text-red-500 ${fontTitle.className}`}>
+            {errors.departamento.message}
+          </span>
+        )}
       </div>
 
       <div className="flex flex-col mb-2">
@@ -233,8 +305,15 @@ export const AdressForm = ({ departamentos, municipios }: Props) => {
         </span>
         <select
           defaultValue={""}
-          className="p-2 border rounded-md bg-gray-200 text-gray-600 capitalize"
-          {...register("municipio", { required: true })}
+          className={clsx(
+            "p-2 border rounded-md bg-gray-200 text-gray-600 capitalize",
+            {
+              "border-2 border-rose-500": errors.municipio,
+            }
+          )}
+          {...register("municipio", {
+            required: "Selecciona tu municipio de residencia",
+          })}
         >
           <option
             value=""
@@ -252,6 +331,11 @@ export const AdressForm = ({ departamentos, municipios }: Props) => {
             </option>
           ))}
         </select>
+        {errors.municipio && (
+          <span className={`text-sm text-red-500 ${fontTitle.className}`}>
+            {errors.municipio.message}
+          </span>
+        )}
       </div>
 
       <div className="flex flex-col mb-2">
@@ -263,9 +347,18 @@ export const AdressForm = ({ departamentos, municipios }: Props) => {
         <input
           placeholder="Ej: Carrera 24A # 83-15"
           type="text"
-          className="p-2 border rounded-md bg-gray-200 capitalize"
-          {...register("direccion", { required: true })}
+          className={clsx("p-2 border rounded-md bg-gray-200 capitalize", {
+            "border-2 border-rose-500": errors.direccion,
+          })}
+          {...register("direccion", {
+            required: "Por favor índicanos la dirección de tu residencia",
+          })}
         />
+        {errors.direccion && (
+          <span className={`text-sm text-red-500 ${fontTitle.className}`}>
+            {errors.direccion.message}
+          </span>
+        )}
       </div>
 
       <div className="flex flex-col mb-2">
@@ -275,7 +368,7 @@ export const AdressForm = ({ departamentos, municipios }: Props) => {
         <input
           placeholder="Barrio, edificio, apto, casa, etc. (opcional)"
           type="text"
-          className="p-2 border rounded-md bg-gray-200"
+          className="p-2 border rounded-md bg-gray-200 capitalize"
           {...register("direccion2", { required: false })}
         />
       </div>
@@ -324,12 +417,10 @@ export const AdressForm = ({ departamentos, municipios }: Props) => {
         <button
           //   href="/checkout"
           type="submit"
-          disabled={!isValid}
-          className={clsx("flex w-full sm:w-1/2 justify-center", {
-            "flex items-center text-center justify-center bg-gradient-to-r from-lime-700 to-lime-600 rounded-sm mt-3 lg:mt-0 py-2 w-full text-white font-semibold hover:cursor-pointer shadow-md":
-              isValid,
-            "btn-disabled": !isValid,
-          })}
+          // disabled={!isValid}
+          className={
+            "sm:w-1/2 flex items-center text-center justify-center w-full bg-gradient-to-r from-lime-700 to-lime-600 text-white font-semibold hover:cursor-pointer shadow-md  rounded-sm mt-3 lg:mt-0 py-2"
+          }
         >
           Siguiente
         </button>

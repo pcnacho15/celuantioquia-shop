@@ -14,12 +14,12 @@ export default function CartPage() {
           {/* Carrito */}
 
           <div className="flex flex-col mt-5">
-            <span className="text-xl">Agregar más items</span>
+            <span className={`text-xl ${fontTitle.className}`}>¿Deseas agregar más productos?</span>
             <Link
               href="/"
               className="underline mb-5 text-lime-600"
             >
-              Continuar comprando
+              Seguir comprando
             </Link>
 
             {/* Items */}

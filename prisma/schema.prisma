@@ -91,6 +91,7 @@ model Order {
   id           String    @id @default(uuid())
   subTotal     Float
   tax          Float
+  envio        Float
   total        Float
   itemsInOrder Int
   isPaid       Boolean   @default(false)
@@ -124,7 +125,7 @@ model OrderItem {
 }
 
 model OrderAdress {
-  id              String @id @default(uuid())
+  id              String  @id @default(uuid())
   correo          String
   nombres         String
   apellidos       String

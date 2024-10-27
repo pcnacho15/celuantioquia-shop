@@ -9,7 +9,7 @@ import Image from "next/image";
 
 export const OrderSummary = () => {
   const [loaded, setLoaded] = useState(false);
-  const { subTotal, tax, total, totalItems } = useCartStore((state) =>
+  const { subTotal, /*tax*/ total, totalItems } = useCartStore((state) =>
     state.getSummaryProducts()
   );
 
@@ -34,6 +34,11 @@ export const OrderSummary = () => {
         <span className={`${fontTitle.className} mb-2`}>Subtotal</span>
         <span className={`text-right mb-2 ${fontTitle.className}`}>
           {currencyFormat(subTotal)}
+        </span>
+
+        <span className={`${fontTitle.className} mb-2`}>Envío</span>
+        <span className={`text-right mb-2 ${fontTitle.className}`}>
+          Por calcular
         </span>
 
         {/* <span className={`${fontTitle.className} mb-2`}>Impuestos (15%)</span>

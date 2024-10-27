@@ -11,6 +11,7 @@ import { useCartStore } from "@/modules/cart";
 import { useAdresStore } from "@/modules/checkout/store/adresStore";
 import { placeOrder } from "@/modules/orders/actions/place-order";
 import clsx from "clsx";
+import { RiSecurePaymentLine } from "react-icons/ri";
 
 
 
@@ -24,7 +25,7 @@ export const PlaceOrder = () => {
   const address = useAdresStore((state) => state.getAdress());
   const cart = useCartStore((state) => state.cart);
   const clearCart = useCartStore((state) => state.clearCart);
-  const { subTotal, tax, total, totalItems } = useCartStore((state) =>
+  const { subTotal, /*tax*/ total, totalItems } = useCartStore((state) =>
     state.getSummaryProducts()
   );
 
@@ -52,7 +53,6 @@ export const PlaceOrder = () => {
     //* Todo salió bien!
     clearCart();
     router.replace('orders/' + resp.order?.id);
-
   };
 
   if (!loaded) {
@@ -60,11 +60,11 @@ export const PlaceOrder = () => {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-xl p-7">
+    <div className="bg-white rounded-xl shadow-xl pt-3 px-7">
       <h2 className={`${fontTitle.className} text-2xl mb-2 font-semibold`}>
         Dirección de entrega
       </h2>
-      <div className="flex flex-col gap-1 mb-10">
+      <div className="flex flex-col gap-1">
         <p className="text-xl capitalize">
           {address.nombres} {address.apellidos}
         </p>
@@ -77,7 +77,7 @@ export const PlaceOrder = () => {
       </div>
 
       {/* Divider */}
-      <div className="w-full h-0.5 rounded bg-gray-200 mb-10" />
+      <div className="w-full h-0.5 rounded my-5 bg-gray-200" />
 
       <h2 className={`${fontTitle.className} text-2xl mb-2 font-semibold`}>
         Resumen de orden
@@ -107,7 +107,7 @@ export const PlaceOrder = () => {
         <p className="mb-5">
           {/* Disclaimer */}
           <span className="text-xs">
-            Al hacer clic en Pagar, aceptas nuestros&quot;
+            Al hacer clic en Pagar, aceptas nuestros &quot;
             <a
               href="#"
               className="underline"
@@ -134,7 +134,9 @@ export const PlaceOrder = () => {
           })}
           onClick={onPlaceOrder}
         >
-          <span className={`uppercase font-semibold text-xl ${fontTitle.className}`}>
+          <span
+            className={`uppercase font-semibold text-xl ${fontTitle.className}`}
+          >
             Pagar
           </span>
           {/* <GoShieldLock
@@ -143,49 +145,61 @@ export const PlaceOrder = () => {
           /> */}
         </button>
 
-        <div className="flex items-center justify-center gap-3">
-          <Image
-            src={`/footerCheckout-mercadopago.svg`}
-            alt="mercadopago"
-            width={60}
-            height={60}
-            className="rounded"
-          />
-          <Image
-            src={`/footerCheckout-efecty.svg`}
-            alt="efecty"
-            width={30}
-            height={30}
-            className="rounded"
-          />
-          <Image
-            src={`/footerCheckout-pse.svg`}
-            alt="pse"
-            width={30}
-            height={30}
-            className="rounded"
-          />
-          <Image
-            src={`/footerCheckout-visaLogo.svg`}
-            alt="american"
-            width={30}
-            height={30}
-            className="rounded"
-          />
-          <Image
-            src={`/footerCheckout-american.svg`}
-            alt="american"
-            width={30}
-            height={30}
-            className="rounded"
-          />
-          <Image
-            src={`/footerCheckout-diners.svg`}
-            alt="diners"
-            width={30}
-            height={30}
-            className="rounded"
-          />
+        <div className="flex flex-col items-center justify-center mt-5">
+          <div className="flex justify-center items-center gap-1">
+            <RiSecurePaymentLine size={30} className="text-gray-600" />
+
+            <span
+              className={`${fontTitle.className} text-sm text-gray-600 font-bold`}
+            >
+              Pago totalmente seguro con{" "}
+              <span className="text-gray-800">mercadopago</span>
+            </span>
+          </div>
+          <div className="flex items-center justify-center gap-3">
+            <Image
+              src={`/footerCheckout-mercadopago.svg`}
+              alt="mercadopago"
+              width={60}
+              height={60}
+              className="rounded"
+            />
+            <Image
+              src={`/footerCheckout-efecty.svg`}
+              alt="efecty"
+              width={30}
+              height={30}
+              className="rounded"
+            />
+            <Image
+              src={`/footerCheckout-pse.svg`}
+              alt="pse"
+              width={30}
+              height={30}
+              className="rounded"
+            />
+            <Image
+              src={`/footerCheckout-visaLogo.svg`}
+              alt="american"
+              width={30}
+              height={30}
+              className="rounded"
+            />
+            <Image
+              src={`/footerCheckout-american.svg`}
+              alt="american"
+              width={30}
+              height={30}
+              className="rounded"
+            />
+            <Image
+              src={`/footerCheckout-diners.svg`}
+              alt="diners"
+              width={30}
+              height={30}
+              className="rounded"
+            />
+          </div>
         </div>
       </div>
     </div>

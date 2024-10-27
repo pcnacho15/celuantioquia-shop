@@ -3,6 +3,7 @@ import { AdressForm } from "./ui/AdressForm";
 import { getDepartments } from "@/modules/checkout/actions/get-departments";
 import { getMunicipios } from "@/modules/checkout/actions/get-municipios";
 import { TbTruckDelivery } from "react-icons/tb";
+import { AddressClient } from "./ui/AddressClient";
 
 export default async function AdressPage() {
   const departamentos = await getDepartments();
@@ -11,13 +12,7 @@ export default async function AdressPage() {
   return (
     <div className="flex flex-col sm:justify-center sm:items-center mb-72 sm:px-0">
       <div className="w-full xl:w-[1000px] flex flex-col justify-center text-left">
-        <Title
-          title="Información de envío"
-          subtitle="Dirección de entrega y datos de contacto"
-          icon={<TbTruckDelivery size={40} />}
-        />
-
-        <AdressForm
+        <AddressClient
           departamentos={departamentos}
           municipios={municipios}
         />
