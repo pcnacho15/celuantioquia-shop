@@ -19,21 +19,36 @@ export const createPreferenceMP = async (orderId: string) => {
     body: {
       items: order!.OrderItem.map((item) => ({
         id: item.product.id,
+        // picture_url: item.product.ProductImages[0],
         category_id: item.product.categoryId,
         title: item.product.title,
         quantity: item.quantity,
         unit_price: item.price,
         currency_id: "COP",
       })),
+      payer: {
+        name: order.OrderAdress!.nombres,
+        surname: order.OrderAdress!.apellidos,
+        email: order.OrderAdress!.correo,
+        phone: {
+          area_code: "57",
+          number: order.OrderAdress!.telefono,
+        },
+        identification: {
+          type: order.OrderAdress!.tipoDocumento,
+          number: order.OrderAdress!.numeroDocumento,
+        },
+      },
       back_urls: {
         success: `${process.env.PROD_HOST}/orders/${orderId}`,
-        // pending: `http://localhost:3000/orders/${orderId}`,
+        pending: `${process.env.PROD_HOST}/orders/${orderId}`,
         // failure: `http://localhost:3000/orders/${orderId}`,
       },
-      notification_url: `${process.env.PROD_HOST}/api/payment/${orderId}`,
+      notification_url: `https://cbtcw0xq-3000.use2.devtunnels.ms/api/payment/${orderId}`,
       external_reference: orderId,
     },
   });
 
-  return resp.id;
+  // Devolvemos el init point (url de pago) para que el usuario pueda pagar
+  return resp.init_point!;
 };

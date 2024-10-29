@@ -17,12 +17,12 @@ export const placeOrder = async (
   const session = await auth();
   const userId = session?.user.id;
 
-  if (!userId) {
-    return {
-      ok: false,
-      message: "No hay sesión de usuario",
-    };
-  }
+  // if (!userId) {
+  //   return {
+  //     ok: false,
+  //     message: "No hay sesión de usuario",
+  //   };
+  // }
 
   // Obtener información de los productos
 
@@ -38,7 +38,7 @@ export const placeOrder = async (
   const itemsInOrder = productIds.reduce((count, p) => count + p.quantity, 0);
 
   // Los totales de tax, subtotal, y total
-  const { subTotal, tax, total } = productIds.reduce(
+  const { subTotal, /*tax,*/ total } = productIds.reduce(
     (totals, item) => {
       const productQuantity = item.quantity;
       const product = products.find((product) => product.id === item.productId);
@@ -48,12 +48,12 @@ export const placeOrder = async (
       const subTotal = product.price * productQuantity;
 
       totals.subTotal += subTotal;
-      totals.tax += subTotal * 0.15;
-      totals.total += subTotal * 1.15;
+      // totals.tax += subTotal * 0.15;
+      totals.total += subTotal /* 1.15*/;
 
       return totals;
     },
-    { subTotal: 0, tax: 0, total: 0 }
+    { subTotal: 0, /*tax: 0,*/ total: 0 }
   );
 
   // Crear la transacción de base de datos
@@ -96,8 +96,10 @@ export const placeOrder = async (
         data: {
           userId: userId,
           itemsInOrder: itemsInOrder,
+          // tipoEnvio: false,
+          // envio: 12000,
+          // tax: tax,
           subTotal: subTotal,
-          tax: tax,
           total: total,
 
           OrderItem: {
@@ -120,7 +122,7 @@ export const placeOrder = async (
       // 3. Crear la direccion de la orden
       // Address
       const { ...restAddress } = address;
-      console.log(address);
+      // console.log(address);
       const orderAddress = await tx.orderAdress.create({
         data: {
           ...restAddress,

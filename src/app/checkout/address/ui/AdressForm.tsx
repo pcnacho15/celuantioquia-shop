@@ -419,10 +419,10 @@ export const AdressForm = ({ departamentos, municipios }: Props) => {
           type="submit"
           // disabled={!isValid}
           className={
-            "sm:w-1/2 flex items-center text-center justify-center w-full bg-gradient-to-r from-lime-700 to-lime-600 text-white font-semibold hover:cursor-pointer shadow-md  rounded-sm mt-3 lg:mt-0 py-2"
+            "sm:w-1/2 flex items-center text-center justify-center w-full bg-gradient-to-r from-lime-700 to-lime-600 text-white font-semibold hover:cursor-pointer shadow-md  rounded-sm py-2"
           }
         >
-          Siguiente
+          Ir a pagar
         </button>
       </div>
     </form>

@@ -24,6 +24,7 @@ export async function POST(request: Request, { params }: Segments) {
 
         if (body.type === "payment") {
             const payment = await new Payment(client).get({ id: body.data.id });
+            console.log(payment)
             if (payment.status === "approved") {
                 await prisma.order.update({
                   where: { id: orderId },

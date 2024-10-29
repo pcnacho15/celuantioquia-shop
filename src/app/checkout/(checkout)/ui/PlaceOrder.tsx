@@ -12,12 +12,13 @@ import { useAdresStore } from "@/modules/checkout/store/adresStore";
 import { placeOrder } from "@/modules/orders/actions/place-order";
 import clsx from "clsx";
 import { RiSecurePaymentLine } from "react-icons/ri";
-
-
+import Link from "next/link";
+import { TbEdit } from "react-icons/tb";
+import { createPreferenceMP } from "@/modules/pagos/actions/mercado-pago/create-prefecence";
 
 export const PlaceOrder = () => {
   const [loaded, setLoaded] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
   const router = useRouter();
@@ -39,20 +40,25 @@ export const PlaceOrder = () => {
     const productsToOrder = cart.map((product) => ({
       productId: product.id,
       quantity: product.quantity,
-      color: product.color ?? '',
+      color: product.color ?? "",
     }));
 
     //! Server Action
     const resp = await placeOrder(productsToOrder, address);
     if (!resp.ok) {
       setIsPlacingOrder(false);
-      setErrorMessage( resp.message );
+      setErrorMessage(resp.message);
       return;
     }
 
+    const urlMercadoPago = await createPreferenceMP( resp.order!.id );
+
+
     //* Todo salió bien!
     clearCart();
-    router.replace('orders/' + resp.order?.id);
+    // router.replace("orders/" + resp.order?.id);
+    router.replace(urlMercadoPago);
+    
   };
 
   if (!loaded) {
@@ -61,19 +67,28 @@ export const PlaceOrder = () => {
 
   return (
     <div className="bg-white rounded-xl shadow-xl pt-3 px-7">
-      <h2 className={`${fontTitle.className} text-2xl mb-2 font-semibold`}>
-        Dirección de entrega
-      </h2>
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-2 md:mb-1">
+        <h2 className={`${fontTitle.className} text-2xl mb-2 font-semibold`}>
+          Dirección de entrega
+        </h2>
+        <Link
+          href={"/checkout/address"}
+          className="text-blue-500 hover:text-blue-600 flex mb-2 items-center gap-1"
+        >
+          Editar dirección
+          <TbEdit size={20} />
+        </Link>
+      </div>
       <div className="flex flex-col gap-1">
         <p className="text-xl capitalize">
           {address.nombres} {address.apellidos}
         </p>
-        <p className="capitalize">
+        <p className="capitalize text-xl">
           {address.municipio} - {address.departamento}
         </p>
-        <p className="capitalize">{address.direccion}</p>
-        <p>{address.direccion2}</p>
-        <p>{address.telefono}</p>
+        <p className="capitalize text-xl">{address.direccion}</p>
+        <p className="text-xl">{address.direccion2}</p>
+        <p className="text-xl">{address.telefono}</p>
       </div>
 
       {/* Divider */}
@@ -84,15 +99,17 @@ export const PlaceOrder = () => {
       </h2>
 
       <div className="grid grid-cols-2">
-        <span>No. Productos</span>
-        <span className="text-right">{`${
+        <span className="text-xl">No. Productos</span>
+        <span className="text-right text-xl">{`${
           totalItems === 1
             ? `${totalItems} Artículo`
             : `${totalItems} Artículos`
         }`}</span>
 
-        <span>Subtotal</span>
-        <span className="text-right">{currencyFormat(subTotal)}</span>
+        <span className="mt-2 text-xl">Subtotal</span>
+        <span className="text-right mt-2 text-xl">
+          {currencyFormat(subTotal)}
+        </span>
 
         {/* <span>Impuestos (15%)</span>
         <span className="text-right">{currencyFormat(tax)}</span> */}
@@ -147,7 +164,10 @@ export const PlaceOrder = () => {
 
         <div className="flex flex-col items-center justify-center mt-5">
           <div className="flex justify-center items-center gap-1">
-            <RiSecurePaymentLine size={30} className="text-gray-600" />
+            <RiSecurePaymentLine
+              size={30}
+              className="text-gray-600"
+            />
 
             <span
               className={`${fontTitle.className} text-sm text-gray-600 font-bold`}
