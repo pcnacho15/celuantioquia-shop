@@ -13,9 +13,11 @@ export const ProductsInCart = () => {
   const [loaded, setLoaded] = useState(false);
 
   const productsInCart = useCartStore((state) => state.cart);
-  const updateProductQuantity = useCartStore((state) => state.updateProductQuantity);
+  const updateProductQuantity = useCartStore(
+    (state) => state.updateProductQuantity
+  );
   const removeProduct = useCartStore((state) => state.removeProduct);
-  const { totalItems } = useCartStore(state => state.getSummaryProducts())
+  const { totalItems } = useCartStore((state) => state.getSummaryProducts());
 
   useEffect(() => {
     setLoaded(true);
@@ -26,22 +28,30 @@ export const ProductsInCart = () => {
   }
 
   if (totalItems <= 0) {
-   return (
-     <div className="flex h-56 flex-col items-center justify-center gap-5 mt-10">
-       <BsCartX size={80} />
-       <span className={`text-xl text-center ${fontTitle.className} font-semibold`}>
-         Upps!! <br /> Parece que tienes tu carrito de compras vacío
-       </span>
-     </div>
-   ); 
+    return (
+      <div className="flex h-56 flex-col items-center justify-center gap-5 mt-10">
+        <BsCartX size={80} />
+        <span
+          className={`text-xl text-center ${fontTitle.className} font-semibold`}
+        >
+          Upps!! <br /> Parece que tienes tu carrito de compras vacío
+        </span>
+      </div>
+    );
   }
 
   return (
-    <>
+    <div
+      className="h-96 pr-3 overflow-auto [&::-webkit-scrollbar]:w-2
+  [&::-webkit-scrollbar-track]:rounded-full
+  [&::-webkit-scrollbar-track]:bg-gray-100
+  [&::-webkit-scrollbar-thumb]:rounded-full
+  [&::-webkit-scrollbar-thumb]:bg-gray-300"
+    >
       {productsInCart.map((p) => (
         <div
           key={`${p.slug}-${p.color}`}
-          className="flex md:items-start my-3 py-5 shadow-md rounded-md w-auto bg-white"
+          className="flex md:items-start my-3 py-5 px-2 shadow-md rounded-md w-auto bg-white"
         >
           <Image
             src={`/products/${p.image}`}
@@ -55,15 +65,15 @@ export const ProductsInCart = () => {
             className="mr-5 px-1 rounded"
           />
 
-          <div className="flex flex-col md:justify-start md:items-start text-sm">
+          <div className="flex flex-col md:justify-start md:items-start">
             <Link
               className="hover:text-lime-600"
               href={`/product/${p.slug}`}
             >
-              <p className={`text-lg ${fontTitle.className}`}>{p.title}</p>
+              <p className={`text-lg`}>{p.title}</p>
             </Link>
             <p className="capitalize text-base mb-2">({p.color})</p>
-            <p className={`mb-2 text-lg ${fontTitle.className}`}>
+            <p className={`mb-2 text-base`}>
               {currencyFormat(p.price)}
             </p>
 
@@ -83,6 +93,6 @@ export const ProductsInCart = () => {
           </div>
         </div>
       ))}
-    </>
+    </div>
   );
 };

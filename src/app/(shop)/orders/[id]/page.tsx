@@ -29,44 +29,50 @@ export default async function OrderPage({ params }: Props) {
   const address = order!.OrderAdress;
 
   return (
-    <div className="flex justify-center items-center mt-10 mb-24 px-0">
+    <div className="flex justify-center items-center mt-10 mb-36 px-0">
       <div className="flex flex-col w-[1000px]">
         {/* <Title title={`Orden #${id.split("-").at(-1)}`} /> */}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
           {/* Carrito */}
           <div className="flex flex-col mt-5">
-            <OrderStatus isPaid={order?.isPaid ?? false} />
+            <div
+              className="h-96 pr-3 overflow-auto [&::-webkit-scrollbar]:w-2
+  [&::-webkit-scrollbar-track]:rounded-full
+  [&::-webkit-scrollbar-track]:bg-gray-100
+  [&::-webkit-scrollbar-thumb]:rounded-full
+  [&::-webkit-scrollbar-thumb]:bg-gray-300"
+            >
+              {/* Items */}
+              {order!.OrderItem.map((item) => (
+                <div
+                  key={item.product.slug + "-" + item.color}
+                  className="flex mb-5"
+                >
+                  <Image
+                    src={`/products/${item.product.ProductImages[0].url}`}
+                    width={100}
+                    height={100}
+                    style={{
+                      width: "100px",
+                      height: "100px",
+                    }}
+                    alt={item.product.title}
+                    className="mr-5 rounded"
+                  />
 
-            {/* Items */}
-            {order!.OrderItem.map((item) => (
-              <div
-                key={item.product.slug + "-" + item.color}
-                className="flex mb-5"
-              >
-                <Image
-                  src={`/products/${item.product.ProductImages[0].url}`}
-                  width={100}
-                  height={100}
-                  style={{
-                    width: "100px",
-                    height: "100px",
-                  }}
-                  alt={item.product.title}
-                  className="mr-5 rounded"
-                />
-
-                <div>
-                  <p>{item.product.title}</p>
-                  <p>
-                    ${currencyFormat(item.price)} x {item.quantity}
-                  </p>
-                  <p className="font-bold">
-                    Subtotal: {currencyFormat(item.price * item.quantity)}
-                  </p>
+                  <div className="flex flex-col gap-2 justify-center">
+                    <p>{item.product.title}</p>
+                    <p>
+                      {currencyFormat(item.price)} x {item.quantity}
+                    </p>
+                    <p>
+                      Subtotal: {currencyFormat(item.price * item.quantity)}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
           {/* Checkout - Resumen de orden */}
@@ -76,7 +82,7 @@ export default async function OrderPage({ params }: Props) {
             >
               Datos de envío
             </h2>
-            <div className="mb-10">
+            <div className="mb-5">
               <div className="flex flex-col gap-1">
                 <p className="text-lg">
                   {address!.nombres} {address!.apellidos}
@@ -87,11 +93,15 @@ export default async function OrderPage({ params }: Props) {
                 <p className="capitalize text-lg">{address!.direccion}</p>
                 <p className="capitalize text-lg">{address!.direccion2}</p>
                 <p className="text-lg">{address!.telefono}</p>
+                <p className="text-lg">
+                  Tipo de envío:{" "}
+                  {!order?.tipoEnvio ? "Nacional" : "Recoger en la tienda"}
+                </p>
               </div>
             </div>
 
             {/* Divider */}
-            <div className="w-full h-0.5 rounded bg-gray-200 mb-10" />
+            <div className="w-full h-0.5 rounded bg-gray-200 mb-5" />
 
             <h2
               className={`text-2xl mb-2 ${fontTitle.className} font-semibold`}
@@ -99,7 +109,7 @@ export default async function OrderPage({ params }: Props) {
               Resumen de tu compra
             </h2>
 
-            <div className="grid grid-cols-2">
+            <div className="grid grid-cols-2 mb-5">
               <span className="text-lg">No. Productos</span>
               <span className="text-right text-lg">
                 {order?.itemsInOrder === 1
@@ -107,10 +117,24 @@ export default async function OrderPage({ params }: Props) {
                   : `${order?.itemsInOrder} artículos`}
               </span>
 
-              <span className="text-lg">Subtotal</span>
-              <span className="text-right text-lg">
+              <span className="text-lg mt-1">Subtotal</span>
+              <span className="text-right text-lg mt-1">
                 {currencyFormat(order!.subTotal)}
               </span>
+              <span className="mt-1 text-lg">Envío</span>
+              {!order?.tipoEnvio ? (
+                <>
+                  <span className="text-right mt-1 text-lg">
+                    {currencyFormat(10000)}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="text-right mt-1 text-lg">
+                    {currencyFormat(0)}
+                  </span>
+                </>
+              )}
 
               {/* <span>Impuestos (15%)</span>
               <span className="text-right">{currencyFormat(order!.tax)}</span> */}
@@ -122,6 +146,7 @@ export default async function OrderPage({ params }: Props) {
                 </span>
               </div>
             </div>
+            <OrderStatus isPaid={order?.isPaid ?? false} />
             {/*  <div className="mt-5 mb-2 w-auto">
               {order?.isPaid ? (
                 <OrderStatus isPaid={order?.isPaid ?? false} />

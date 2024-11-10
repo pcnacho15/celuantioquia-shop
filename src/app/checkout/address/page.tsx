@@ -10,7 +10,7 @@ export default async function AdressPage() {
   const municipios = await getMunicipios();
 
   return (
-    <div className="flex flex-col sm:justify-center sm:items-center mb-72 sm:px-0">
+    <div className="flex flex-col sm:justify-center sm:items-center mb-72 px-5">
       <div className="w-full xl:w-[1000px] flex flex-col justify-center text-left">
         <AddressClient
           departamentos={departamentos}

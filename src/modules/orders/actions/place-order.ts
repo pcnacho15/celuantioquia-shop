@@ -96,7 +96,7 @@ export const placeOrder = async (
         data: {
           userId: userId,
           itemsInOrder: itemsInOrder,
-          // tipoEnvio: false,
+          tipoEnvio: address.tipoEnvio,
           // envio: 12000,
           // tax: tax,
           subTotal: subTotal,
@@ -121,7 +121,7 @@ export const placeOrder = async (
 
       // 3. Crear la direccion de la orden
       // Address
-      const { ...restAddress } = address;
+      const { tipoEnvio, ...restAddress } = address;
       // console.log(address);
       const orderAddress = await tx.orderAdress.create({
         data: {

@@ -21,6 +21,7 @@ export interface Adress {
   tipoDocumento: string;
   departamento: string;
   municipio: string;
+  tipoEnvio: boolean;
   // codigoPostal: string;
   // ciudad: string;
   // pais: string;

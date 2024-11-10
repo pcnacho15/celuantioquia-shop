@@ -44,7 +44,7 @@ export const createPreferenceMP = async (orderId: string) => {
         pending: `${process.env.PROD_HOST}/orders/${orderId}`,
         // failure: `http://localhost:3000/orders/${orderId}`,
       },
-      notification_url: `https://cbtcw0xq-3000.use2.devtunnels.ms/api/payment/${orderId}`,
+      notification_url: `${process.env.PROD_HOST}/api/payment/${orderId}`,
       external_reference: orderId,
     },
   });

@@ -10,6 +10,8 @@ import clsx from "clsx";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { BsShop } from "react-icons/bs";
+import { TbTruckDelivery } from "react-icons/tb";
 
 interface FormInputs {
   correo: string;
@@ -35,6 +37,7 @@ interface Props {
 export const AdressForm = ({ departamentos, municipios }: Props) => {
   // console.log(municipios)
   const [municipioSelect, setMunicipioSelect] = useState<Municipio[]>([]);
+  const [envio, setEnvio] = useState(false);
 
   const router = useRouter();
   const setAdress = useAdresStore((state) => state.setAdress);
@@ -47,7 +50,7 @@ export const AdressForm = ({ departamentos, municipios }: Props) => {
   const {
     handleSubmit,
     register,
-    formState: { isValid, errors },
+    formState: { /*isValid,*/ errors },
     watch,
     reset,
   } = useForm<FormInputs>();
@@ -65,7 +68,9 @@ export const AdressForm = ({ departamentos, municipios }: Props) => {
     // const departamento= Number(adress.departamento);
     // const municipio = Number(adress.municipio);
 
-    const { departamento, municipio, ...resto } = adress;
+    const { departamento, municipio, tipoEnvio, ...resto } = adress;
+
+    setEnvio( tipoEnvio )
 
     const departmentFound = departamentos.find(
       (d) => d.nombre === departamento
@@ -82,6 +87,10 @@ export const AdressForm = ({ departamentos, municipios }: Props) => {
   }, [valueDepartamento]);
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
+    // if (envio === 2) {
+    //   return;
+    // }
+
     const { departamento, municipio, ...resto } = data;
     const departmentById = await getDepartmentById(Number(departamento));
     const municipioById = await getMunicipioById(Number(municipio));
@@ -92,6 +101,7 @@ export const AdressForm = ({ departamentos, municipios }: Props) => {
       ...resto,
       departamento: departmentById!.nombre,
       municipio: municipioById!.nombre,
+      tipoEnvio: envio
     });
     router.replace("/checkout");
   };
@@ -373,17 +383,63 @@ export const AdressForm = ({ departamentos, municipios }: Props) => {
         />
       </div>
 
-      {/* <div className="flex flex-col mb-2">
-        <span>Código postal</span>
-        <input
-          type="text"
-          className="p-2 border rounded-md bg-gray-200"
-          {...register("codigoPostal", { required: true })}
-        />
-      </div> */}
+      <div className="flex flex-col">
+        <div className="flex flex-col gap-1">
+          <span
+            className={`text-gray-500 font-semibold ${fontTitle.className}`}
+          >
+            Tipo de envío
+          </span>
+          <div className="flex gap-10">
+            <button
+              type="button"
+              onClick={() => setEnvio(false)}
+              className="flex flex-col justify-center items-center gap-2"
+            >
+              <div
+                className={clsx(
+                  "cursor-pointer border-2 bg-opacity-25 rounded-full py-2 px-2 ",
+                  {
+                    "border-lime-500 bg-lime-500 text-lime-700 fade-in":
+                      !envio,
+                    "border-gray-500 bg-none text-gray-500 fade-in":
+                      envio,
+                  }
+                )}
+              >
+                <TbTruckDelivery size={30} />
+              </div>
+              <span className="text-gray-500 text-xs underline hover:cursor-pointer">
+                Envío nacional
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setEnvio(true)}
+              className="flex flex-col justify-center items-center gap-2"
+            >
+              <div
+                className={clsx(
+                  "cursor-pointer border-2 bg-opacity-25 rounded-full py-2 px-2",
+                  {
+                    "border-lime-500 bg-lime-500 text-lime-700 fade-in":
+                      envio,
+                    "border-gray-500 bg-none text-gray-500 fade-in":
+                      !envio,
+                  }
+                )}
+              >
+                <BsShop size={30} />
+              </div>
+              <span className="text-gray-500 text-xs underline hover:cursor-pointer">
+                Recoger en tienda
+              </span>
+            </button>
+          </div>
+        </div>
 
-      <div className="flex flex-col mb-2 mt-5">
-        {/* <div className="inline-flex items-center mb-10">
+        <div className="flex flex-col mb-2 mt-5">
+          {/* <div className="inline-flex items-center mb-10">
           <label
             className="relative flex cursor-pointer items-center rounded-full p-3"
             htmlFor="checkbox"
@@ -414,16 +470,17 @@ export const AdressForm = ({ departamentos, municipios }: Props) => {
           </label>
           <span>Recordar dirección</span>
         </div> */}
-        <button
-          //   href="/checkout"
-          type="submit"
-          // disabled={!isValid}
-          className={
-            "sm:w-1/2 flex items-center text-center justify-center w-full bg-gradient-to-r from-lime-700 to-lime-600 text-white font-semibold hover:cursor-pointer shadow-md  rounded-sm py-2"
-          }
-        >
-          Ir a pagar
-        </button>
+          <button
+            //   href="/checkout"
+            type="submit"
+            // disabled={!isValid}
+            className={
+              "sm:w-1/2 flex items-center text-center justify-center w-full bg-gradient-to-r from-lime-700 to-lime-600 text-white font-semibold hover:cursor-pointer shadow-md  rounded-sm py-2"
+            }
+          >
+            Ir a pagar
+          </button>
+        </div>
       </div>
     </form>
   );

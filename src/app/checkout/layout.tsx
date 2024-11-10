@@ -20,7 +20,7 @@ export default async function CheckoutLayout({
     <>
       <TopMenuSale />
       <Sidebar />
-      <div className="px-3 sm:px-10">{children}</div>
+      <div className="w-full md:w-3/4 m-auto">{children}</div>
 
       <Footer />
     </>
