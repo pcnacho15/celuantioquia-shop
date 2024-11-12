@@ -13,15 +13,6 @@ import { GrBasket } from "react-icons/gr";
 import { TbLockDollar } from "react-icons/tb";
 
 export const TopMenuSale = () => {
-  const openSideMenu = useUiStore((state) => state.openSideMenu);
-  const totalItems = useCartStore((state) => state.getTotalItems());
-  const [loaded, setLoaded] = useState(false);
-
-  // const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    setLoaded(true);
-  }, []);
 
   return (
     <nav

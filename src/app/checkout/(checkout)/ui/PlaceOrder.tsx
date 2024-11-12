@@ -84,12 +84,12 @@ export const PlaceOrder = () => {
         <p className="capitalize text-lg">
           {address.municipio} - {address.departamento}
         </p>
-        <p className="capitalize text-lg">{address.direccion}</p>
-        <p className="text-lg">{address.direccion2}</p>
+        <p className="capitalize text-lg">
+          {address.direccion} ({address.direccion2})
+        </p>
         <p className="text-lg">{address.telefono}</p>
         <p className="text-lg capitalize">
-          tipo envío:{" "}
-          {!address.tipoEnvio ? "Nacional" : "Recoger en la tienda"}
+          tipo envío: {!address.tipoEnvio ? "Nacional" : "Recoger en la tienda"}
         </p>
       </div>
 
@@ -166,9 +166,7 @@ export const PlaceOrder = () => {
           })}
           onClick={onPlaceOrder}
         >
-          <span
-            className={`uppercase font-semibold ${fontTitle.className}`}
-          >
+          <span className={`uppercase font-semibold ${fontTitle.className}`}>
             Pagar
           </span>
           {/* <GoShieldLock
