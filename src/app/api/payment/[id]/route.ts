@@ -8,15 +8,19 @@ const client = new MercadoPagoConfig({
   accessToken: process.env.MP_ACCESS_TOKEN!,
 });
 
-interface Segments {
-    params: {
-        id: string;
-    }
-}
+type Params = Promise<{
+    id: string;
+}>
 
-export async function POST(request: Request, { params }: Segments) {
+// interface Segments {
+//     params: {
+//         id: string;
+//     }
+// }
 
-    const { id: orderId } = params;
+export async function POST(request: Request, segmentData: {params: Params}) {
+
+    const { id: orderId } = await segmentData.params;
 
     const body = await request.json();
 

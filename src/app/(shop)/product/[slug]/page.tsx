@@ -21,15 +21,19 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-interface Props {
-  params: {
-    slug: string;
-  };
-}
+type Params = Promise<{
+  slug: string;
+}>;
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+// interface Props {
+//   params: {
+//     slug: string;
+//   };
+// }
+
+export async function generateMetadata(props: {params: Params}): Promise<Metadata> {
   // read route params
-  const slug = params.slug;
+  const {slug} = await props.params;
 
   // fetch data
   const product = await getProductBySlug(slug);
@@ -49,8 +53,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function ProductPage({ params }: Props) {
-  const { slug } = params;
+export default async function ProductPage(props: { params: Params }) {
+  const { slug } = await props.params;
   const product = await getProductBySlug(slug);
   const { products } = await getProductsRelationByMarca(
     product!.marca,

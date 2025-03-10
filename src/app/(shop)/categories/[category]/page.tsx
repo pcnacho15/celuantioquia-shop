@@ -1,32 +1,48 @@
 export const revalidate = 60; // 60 segundos
 
-import { getPaginatedProductsWithImages, Pagination, ProductGrid, Title } from "@/modules";
+import {
+  getPaginatedProductsWithImages,
+  Pagination,
+  ProductGrid,
+  Title,
+} from "@/modules";
 import { getCategoryWithId } from "@/modules/categories";
 import { getFiltersProduct } from "@/modules/products/actions/product-filters";
 import { ProductsFilter } from "@/modules/products/components/ProductsFilter";
 import { notFound } from "next/navigation";
 
-interface Props {
-  params: {
-    category: string;
-  };
-  searchParams: {
-    page?: string;
-  };
-}
+type Params = Promise<{
+  category: string;
+}>;
 
-export default async function CaregoryPage({ params, searchParams }: Props) {
+type SearchParams = Promise<{
+  page?: string;
+}>;
 
-  const { category } = await params;
+// type Props = Promise<{
+//   params: {
+//     category: string;
+//   };
+//   searchParams: {
+//     page?: string;
+//   };
+// }>
+
+export default async function CaregoryPage(props: { params: Params; searchParams: SearchParams }) {
+  const { category } = await props.params;
+  
   const categoryDB = await getCategoryWithId({ category });
   if (!categoryDB) notFound();
-  
-  const currentParams = await searchParams;
+
+  const currentParams = await props.searchParams;
   const page = currentParams.page ? parseInt(currentParams.page) : 1;
 
-  const { products, totalPages } = await getPaginatedProductsWithImages({ page, categoryId: categoryDB.id });
+  const { products, totalPages } = await getPaginatedProductsWithImages({
+    page,
+    categoryId: categoryDB.id,
+  });
 
-   const { marcas, colores } = await getFiltersProduct();
+  const { marcas, colores } = await getFiltersProduct();
 
   const labels: Record<string, string> = {
     celulares: "Celulares",

@@ -11,15 +11,19 @@ import { ProductsFilter } from "@/modules/products/components/ProductsFilter";
 import { getFiltersProduct } from "@/modules/products/actions/product-filters";
 // import { initialData } from "@/seed/seed";
 
-interface Props {
-  searchParams: {
-    page?: string;
-  };
-}
+type SearchParams = Promise<{
+  page?: string;
+}>;
 
-export default async function HomePage({ searchParams }: Props) {
+// interface Props {
+//   searchParams: {
+//     page?: string;
+//   };
+// }
 
-  const currentParams = await searchParams
+export default async function HomePage(props: { searchParams: SearchParams }) {
+
+  const currentParams = await props.searchParams
   const page = currentParams.page ? parseInt(currentParams.page) : 1;
 
   const { products, totalPages } = await getPaginatedProductsWithImages({

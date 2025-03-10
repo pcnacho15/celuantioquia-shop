@@ -17,8 +17,8 @@ export const MercadoPagoButton = ({ preferenceId }: Props) => {
 
   return (
     <Wallet
-      initialization={{ preferenceId: preferenceId, redirectMode: "modal" }}
-      customization={{ texts: { valueProp: "payment_methods_logos" } }}
+      initialization={{ preferenceId: preferenceId, redirectMode: "blank" }}
+      // customization={{ checkout: { theme: "" } }}
     />
   );
 };

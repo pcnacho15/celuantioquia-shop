@@ -9,14 +9,19 @@ import { getOrderById } from "@/modules/orders/actions/get-order-by-id";
 // import { createPreferenceMP } from "@/modules/pagos/actions/mercado-pago/create-prefecence";
 // import { MercadoPagoButton } from "@/modules/pagos/components/MercadoPagoButton";
 
-interface Props {
-  params: {
-    id: string;
-  };
-}
 
-export default async function OrderPage({ params }: Props) {
-  const { id } = await params;
+type Params = Promise<{
+  id: string;
+}>;
+
+// interface Props {
+//   params: {
+//     id: string;
+//   };
+// }
+
+export default async function OrderPage(props: { params: Params }) {
+  const { id } = await props.params;
 
   const { ok, order } = await getOrderById(id);
 
