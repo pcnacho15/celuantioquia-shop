@@ -139,7 +139,7 @@ export const ProductGridItem = ({ product }: Props) => {
           {posted ? (
             <button
               type="button"
-              className="fade-in flex items-center text-center text-white justify-center bg-gradient-to-r from-lime-500 to-lime-400 rounded mt-3 lg:mt-0 py-2 w-full xl:w-1/2 m-auto hover:cursor-not-allowed duration-[500ms,800ms]"
+              className="fade-in flex items-center text-center text-white justify-center bg-gradient-to-r from-lime-500 to-lime-400 rounded mt-3 lg:mt-0 py-2 w-full xl:w-1/2 m-auto hover:cursor-not-allowed duration-500"
               disabled
             >
               <div className="flex items-center justify-center m-[2.5px]">

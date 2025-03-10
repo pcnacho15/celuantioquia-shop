@@ -16,7 +16,7 @@ interface Props {
 }
 
 export default async function OrderPage({ params }: Props) {
-  const { id } = params;
+  const { id } = await params;
 
   const { ok, order } = await getOrderById(id);
 
@@ -47,7 +47,7 @@ export default async function OrderPage({ params }: Props) {
               {order!.OrderItem.map((item) => (
                 <div
                   key={item.product.slug + "-" + item.color}
-                  className="flex mb-5"
+                  className="flex mb-5 bg-white p-3 rounded-xl shadow-lg"
                 >
                   <Image
                     src={`/products/${item.product.ProductImages[0].url}`}
@@ -64,10 +64,12 @@ export default async function OrderPage({ params }: Props) {
                   <div className="flex flex-col gap-2 justify-center">
                     <p>{item.product.title}</p>
                     <p>
-                      {currencyFormat(item.price)} x {item.quantity}
+                      <span className="font-semibold">Cantidad:</span>{" "}
+                      {item.quantity}
                     </p>
                     <p>
-                      Subtotal: {currencyFormat(item.price * item.quantity)}
+                      <span className="font-semibold">Subtotal:</span>{" "}
+                      {currencyFormat(item.price * item.quantity)}
                     </p>
                   </div>
                 </div>

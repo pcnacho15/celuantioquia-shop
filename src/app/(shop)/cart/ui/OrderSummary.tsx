@@ -24,22 +24,18 @@ export const OrderSummary = () => {
   return (
     <>
       <div className="grid grid-cols-2">
-        <span className={`${fontTitle.className} mb-2`}>No. Productos</span>
-        <span className={`text-right mb-2 ${fontTitle.className}`}>{`${
+        <span className={`mb-2`}>No. Productos</span>
+        <span className={`text-right mb-2`}>{`${
           totalItems === 1
             ? `${totalItems} Artículo`
             : `${totalItems} Artículos`
         }`}</span>
 
-        <span className={`${fontTitle.className} mb-2`}>Subtotal</span>
-        <span className={`text-right mb-2 ${fontTitle.className}`}>
-          {currencyFormat(subTotal)}
-        </span>
+        <span className={`mb-2`}>Subtotal</span>
+        <span className={`text-right mb-2`}>{currencyFormat(subTotal)}</span>
 
-        <span className={`${fontTitle.className} mb-2`}>Envío</span>
-        <span className={`text-right mb-2 ${fontTitle.className}`}>
-          Por calcular
-        </span>
+        <span className={`mb-2`}>Envío</span>
+        <span className={`text-right mb-2`}>Por calcular</span>
 
         {/* <span className={`${fontTitle.className} mb-2`}>Impuestos (15%)</span>
         <span className={`text-right mb-2 ${fontTitle.className}`}>
@@ -47,27 +43,21 @@ export const OrderSummary = () => {
         </span> */}
 
         <div className="flex justify-between flex-col flex-wrap mt-5 w-full">
-          <span className={`mt-5 text-2xl ${fontTitle.className}`}>
-            Total:{" "}
-          </span>
-          <span className={`mt-1 text-2xl ${fontTitle.className}`}>
-            {currencyFormat(total)}
-          </span>
+          <span className={`mt-5 text-2xl`}>Total: </span>
+          <span className={`mt-1 text-2xl`}>{currencyFormat(total)}</span>
         </div>
       </div>
       <div className="mt-8 w-full">
         {totalItems > 0 ? (
           <Link
-            className={`flex items-center justify-center gap-2 bg-gradient-to-r from-lime-700 to-lime-600 text-gray-50 py-2 px-4 rounded-sm transition-all w-full`}
+            className={`flex items-center justify-center gap-2 bg-gradient-to-r from-lime-700 to-lime-600 text-gray-50 py-2 px-4 rounded-sm transition-all w-full hover:scale-105 duration-300`}
             href="/checkout/address"
           >
+            <span className={`uppercase font-semibold`}>pago seguro</span>
             <TbLockDollar
               size={25}
               className="mb-1"
             />
-            <span className={`uppercase font-semibold ${fontTitle.className}`}>
-              pago seguro
-            </span>
           </Link>
         ) : (
           <button

@@ -166,7 +166,7 @@ export const PlaceOrder = () => {
           })}
           onClick={onPlaceOrder}
         >
-          <span className={`uppercase font-semibold ${fontTitle.className}`}>
+          <span className={`uppercase font-semibold tracking-wider text-lg`}>
             Pagar
           </span>
           {/* <GoShieldLock

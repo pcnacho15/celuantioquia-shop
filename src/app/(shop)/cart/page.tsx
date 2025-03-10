@@ -14,7 +14,7 @@ export default function CartPage() {
           {/* Carrito */}
 
           <div className="flex flex-col mt-5">
-            <span className={`text-xl ${fontTitle.className}`}>¿Deseas agregar más productos?</span>
+            <span className={`text-xl`}>¿Deseas agregar más productos?</span>
             <Link
               href="/"
               className="underline mb-5 text-lime-600"
@@ -28,7 +28,7 @@ export default function CartPage() {
           {/* Checkout */}
           <div className="bg-white rounded-xl shadow-xl p-7 h-fit">
             <h2
-              className={`text-2xl font-semibold mb-2 ${fontTitle.className}`}
+              className={`text-2xl font-semibold mb-2`}
             >
               Resumen de mi orden
             </h2>

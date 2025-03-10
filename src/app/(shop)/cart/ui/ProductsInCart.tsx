@@ -32,7 +32,7 @@ export const ProductsInCart = () => {
       <div className="flex h-56 flex-col items-center justify-center gap-5 mt-10">
         <BsCartX size={80} />
         <span
-          className={`text-xl text-center ${fontTitle.className} font-semibold`}
+          className={`text-xl text-center font-semibold`}
         >
           Upps!! <br /> Parece que tienes tu carrito de compras vacío
         </span>

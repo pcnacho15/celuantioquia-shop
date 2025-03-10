@@ -7,12 +7,14 @@ export default function ShopLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="min-h-screen">
-      <TopMenu />
-      <Sidebar />
-      <ProductFilterMenu />
-      <div className="px-5 sm:px-10 mb-20 pt-16">{children}</div>
+    <div>
+      <main className="min-h-screen">
+        <TopMenu />
+        <Sidebar />
+        <ProductFilterMenu />
+        <div className="px-5 sm:px-10 pt-16">{children}</div>
+      </main>
       <Footer />
-    </main>
+    </div>
   );
 }
