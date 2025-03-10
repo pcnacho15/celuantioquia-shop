@@ -35,7 +35,7 @@ export const Sidebar = () => {
 
   const onLogout = async () => {
     await logout();
-    window.location.replace(pathName);
+    window.location.reload();
   };
 
   return (
@@ -181,14 +181,14 @@ export const Sidebar = () => {
         {isAuthenticated && (
           <button
             onClick={() => onLogout()}
-            className="flex w-full items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+            className="flex p-2 w-full items-end mt-10 gap-1 text-red-500 hover:bg-gray-100 rounded transition-all"
           >
             <IoLogOutOutline size={30} />
-            <span className="ml-3 text-xl">Salir</span>
+            <span className="text-xl">Salir</span>
           </button>
         )}
 
-        {!isAuthenticated && (
+        {/* {!isAuthenticated && (
           <Link
             href="/auth/login"
             onClick={() => closeMenu()}
@@ -197,7 +197,7 @@ export const Sidebar = () => {
             <IoLogInOutline size={30} />
             <span className="ml-3 text-xl">Ingresar</span>
           </Link>
-        )}
+        )} */}
       </nav>
     </div>
   );

@@ -6,8 +6,8 @@ import { redirect } from "next/navigation";
 import { currencyFormat, fontTitle } from "@/utils";
 import { OrderStatus, Title } from "@/modules";
 import { getOrderById } from "@/modules/orders/actions/get-order-by-id";
-import { createPreferenceMP } from "@/modules/pagos/actions/mercado-pago/create-prefecence";
-import { MercadoPagoButton } from "@/modules/pagos/components/MercadoPagoButton";
+// import { createPreferenceMP } from "@/modules/pagos/actions/mercado-pago/create-prefecence";
+// import { MercadoPagoButton } from "@/modules/pagos/components/MercadoPagoButton";
 
 interface Props {
   params: {

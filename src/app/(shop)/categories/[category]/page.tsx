@@ -17,11 +17,12 @@ interface Props {
 
 export default async function CaregoryPage({ params, searchParams }: Props) {
 
-  const { category } = params;
+  const { category } = await params;
   const categoryDB = await getCategoryWithId({ category });
   if (!categoryDB) notFound();
   
-  const page = searchParams.page ? parseInt(searchParams.page) : 1;
+  const currentParams = await searchParams;
+  const page = currentParams.page ? parseInt(currentParams.page) : 1;
 
   const { products, totalPages } = await getPaginatedProductsWithImages({ page, categoryId: categoryDB.id });
 

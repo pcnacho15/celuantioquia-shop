@@ -1,43 +1,72 @@
 "use client";
 
+import { useActionState, useEffect } from "react";
 import Link from "next/link";
-import { useFormState, useFormStatus } from "react-dom";
-import { authenticate } from "@/modules/auth/actions/login";
 import clsx from "clsx";
+import { authenticate } from "@/modules/auth";
+
+import { IoInformationCircleOutline } from "react-icons/io5";
 // import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 export const LoginForm = () => {
-  // const router = useRouter();
-  const [state, dispatch] = useFormState(authenticate, undefined);
-  
+  // const router = useRouter()
+
+  const [errorMessage, formAction, isPending] = useActionState(
+    authenticate,
+    undefined
+  );
+
   useEffect(() => {
-    if (state === "Success") {
+    if (errorMessage === "success") {
       // router.replace("/");
       window.location.replace("/");
     }
-  }, [state]);
+  }, [errorMessage]);
 
   return (
     <form
-      action={dispatch}
+      action={formAction}
       className="flex flex-col"
     >
-      <label htmlFor="email">Correo electrónico</label>
+      {errorMessage && errorMessage !== "success" && (
+        <div
+          className="flex h-8 items-center mb-2 space-x-1"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          <>
+            <IoInformationCircleOutline className="h-5 w-5 text-red-500" />
+            <p className="text-base text-red-500">{errorMessage}</p>
+          </>
+        </div>
+      )}
+
+      {/* <label htmlFor="email">Correo electrónico</label> */}
       <input
-        className="px-5 py-2 border bg-gray-200 rounded mb-5 w-full"
+        className="px-5 py-2 border border-gray-400 rounded mb-5 w-full"
         type="email"
         name="email"
+        placeholder="Correo"
       />
 
-      <label htmlFor="password">Contraseña</label>
+      {/* <label htmlFor="password">Contraseña</label> */}
       <input
-        className="px-5 py-2 border bg-gray-200 rounded mb-5"
+        className="px-5 py-2 border border-gray-400 rounded mb-5"
         type="password"
         name="password"
+        placeholder="Contraseña"
       />
-
-      <LoginButton />
+      <button
+        type="submit"
+        className={clsx({
+          "btn-primary": !isPending,
+          "btn-disabled": isPending,
+        })}
+        disabled={isPending}
+        // disabled={isPending}
+      >
+        Ingresar
+      </button>
 
       {/* divisor l ine */}
       <div className="flex items-center my-5">
@@ -55,20 +84,3 @@ export const LoginForm = () => {
     </form>
   );
 };
-
-function LoginButton() {
-  const { pending } = useFormStatus();
-
-  return (
-    <button
-      type="submit"
-      className={clsx({
-        "btn-primary": !pending,
-        "btn-disabled": pending,
-      })}
-      disabled={pending}
-    >
-      Ingresar
-    </button>
-  );
-}

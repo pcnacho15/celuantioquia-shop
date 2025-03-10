@@ -1,6 +1,7 @@
 "use server";
 
 import { signIn } from "@/utils";
+import { AuthError } from "next-auth";
 
 // ...
 
@@ -14,11 +15,18 @@ export async function authenticate(
       redirect: false,
     });
 
-    return 'Success'
+    return 'success'
 
   } catch (error) {
-    console.log(error)
-    return "CredentialsSignin";
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return "Credenciales incorrectas";
+        default:
+          return "Algo salió mal. Intente de nuevo";
+      }
+    }
+    throw error;
   }
 }
 
