@@ -10,11 +10,20 @@ import { currencyFormat, fontTitle } from "@/utils";
 import { useCartStore } from "@/modules/cart";
 import { useAdresStore } from "@/modules/checkout/store/adresStore";
 import { placeOrder } from "@/modules/orders/actions/place-order";
-import clsx from "clsx";
-import { RiSecurePaymentLine } from "react-icons/ri";
+// import clsx from "clsx";
+// import { RiSecurePaymentLine } from "react-icons/ri";
 import Link from "next/link";
 import { TbEdit } from "react-icons/tb";
 import { createPreferenceMP } from "@/modules/pagos/actions/mercado-pago/create-prefecence";
+import Script from "next/script";
+import { Epayco } from "@/modules/pagos/components/Epayco";
+
+// Declaración del objeto ePayco en el ámbito global
+declare global {
+  interface Window {
+    ePayco: any;
+  }
+}
 
 export const PlaceOrder = () => {
   const [loaded, setLoaded] = useState(false);
@@ -31,7 +40,27 @@ export const PlaceOrder = () => {
   );
 
   useEffect(() => {
-    setLoaded(true);
+    // Verificar si el script ya está cargado para evitar duplicados
+    if (!document.querySelector("#epayco-script")) {
+      const script = document.createElement("script");
+      script.src = "https://checkout.epayco.co/checkout.js";
+      script.async = true;
+      script.id = "epayco-script";
+
+      // Detectar cuando el script se ha cargado correctamente
+      script.onload = () => {
+        setLoaded(true);
+      };
+
+      document.body.appendChild(script);
+
+      // Limpieza del script cuando el componente se desmonta
+      return () => {
+        document.body.removeChild(script);
+      };
+    } else {
+      setLoaded(true); // El script ya estaba cargado
+    }
   }, []);
 
   const onPlaceOrder = async () => {
@@ -51,145 +80,210 @@ export const PlaceOrder = () => {
       return;
     }
 
-    const urlMercadoPago = await createPreferenceMP(resp.order!.id);
+    return resp.prismaTx;
+
+    // const urlMercadoPago = await createPreferenceMP(resp.order!.id);
 
     //* Todo salió bien!
-    clearCart();
-    // router.replace("orders/" + resp.order?.id);
-    router.replace(urlMercadoPago);
+    // clearCart();
+    // // router.replace("orders/" + resp.order?.id);
+    // router.replace(urlMercadoPago);
   };
+
+
+    const handlePayment = async () => {
+      if (!loaded || !window.ePayco) {
+        console.error(
+          "Epayco aún no está cargado. Por favor, espera unos segundos y vuelve a intentarlo."
+        );
+        return;
+      }
+
+      const handler = window.ePayco.checkout.configure({
+        key: process.env.NEXT_PUBLIC_EPAYCO_KEY,
+        test: true, // Cambiar a false en producción
+      });
+
+      const resp = await onPlaceOrder();
+      // console.log()
+
+      const productos = resp?.updatedProducts.map((p) => p.title).join(', ');
+      // console.log(productos);
+
+      const data = {
+        name: "Celuantioquia",
+        description: productos,
+        invoice: resp!.order.id,
+        currency: "cop",
+        amount: "10000",
+        tax_base: "10000",
+        tax: "0",
+        country: "CO",
+        lang: "es",
+        external: "false",
+        response: `${process.env.NEXT_PUBLIC_PAYCO_RESPONSE_URL}/orders/${
+          resp!.order?.id
+        }`,
+        confirmation: `${process.env.NEXT_PUBLIC_PAYCO_RESPONSE_URL}/api/epayco`,
+        // method_confirmation: "post",
+        // extra1: "Información adicional 1",
+      };
+
+      handler.open(data);
+    };
 
   if (!loaded) {
     return <p>Cargando...</p>;
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-xl pt-7 px-7 m-auto">
-      <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-2 md:mb-1">
+    <>
+      <div className="rounded-xl shadow-xl pt-7 px-7 m-auto">
+        <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-2 md:mb-1">
+          <h2 className={`${fontTitle.className} text-xl mb-2 font-semibold`}>
+            Dirección de entrega
+          </h2>
+          <Link
+            href={"/checkout/address"}
+            className="text-blue-500 hover:text-blue-600 flex mb-2 items-center gap-1"
+          >
+            Editar dirección
+            <TbEdit size={20} />
+          </Link>
+        </div>
+        <div className="flex flex-col gap-1">
+          <p className="text-lg capitalize">
+            {address.nombres} {address.apellidos}
+          </p>
+          <p className="capitalize text-lg">
+            {address.municipio} - {address.departamento}
+          </p>
+          <p className="capitalize text-lg">
+            {address.direccion} ({address.direccion2})
+          </p>
+          <p className="text-lg">{address.telefono}</p>
+          <p className="text-lg capitalize">
+            tipo envío:{" "}
+            {!address.tipoEnvio ? "Nacional" : "Recoger en la tienda"}
+          </p>
+        </div>
+
+        {/* Divider */}
+        <div className="w-full h-0.5 rounded my-5 bg-gray-200" />
+
         <h2 className={`${fontTitle.className} text-xl mb-2 font-semibold`}>
-          Dirección de entrega
+          Resumen de orden
         </h2>
-        <Link
-          href={"/checkout/address"}
-          className="text-blue-500 hover:text-blue-600 flex mb-2 items-center gap-1"
-        >
-          Editar dirección
-          <TbEdit size={20} />
-        </Link>
-      </div>
-      <div className="flex flex-col gap-1">
-        <p className="text-lg capitalize">
-          {address.nombres} {address.apellidos}
-        </p>
-        <p className="capitalize text-lg">
-          {address.municipio} - {address.departamento}
-        </p>
-        <p className="capitalize text-lg">
-          {address.direccion} ({address.direccion2})
-        </p>
-        <p className="text-lg">{address.telefono}</p>
-        <p className="text-lg capitalize">
-          tipo envío: {!address.tipoEnvio ? "Nacional" : "Recoger en la tienda"}
-        </p>
-      </div>
 
-      {/* Divider */}
-      <div className="w-full h-0.5 rounded my-5 bg-gray-200" />
+        <div className="grid grid-cols-2">
+          <span className="text-lg">No. Productos</span>
+          <span className="text-right text-lg">{`${
+            totalItems === 1
+              ? `${totalItems} Artículo`
+              : `${totalItems} Artículos`
+          }`}</span>
 
-      <h2 className={`${fontTitle.className} text-xl mb-2 font-semibold`}>
-        Resumen de orden
-      </h2>
+          <span className="mt-2 text-lg">Subtotal</span>
+          <span className="text-right mt-2 text-lg">
+            {currencyFormat(subTotal)}
+          </span>
+          <span className="mt-2 text-lg">Envío</span>
 
-      <div className="grid grid-cols-2">
-        <span className="text-lg">No. Productos</span>
-        <span className="text-right text-lg">{`${
-          totalItems === 1
-            ? `${totalItems} Artículo`
-            : `${totalItems} Artículos`
-        }`}</span>
+          {!address.tipoEnvio ? (
+            <>
+              <span className="text-right mt-2 text-lg">
+                {currencyFormat(10000)}
+              </span>
+            </>
+          ) : (
+            <>
+              <span className="text-right mt-2 text-lg">
+                {currencyFormat(0)}
+              </span>
+            </>
+          )}
 
-        <span className="mt-2 text-lg">Subtotal</span>
-        <span className="text-right mt-2 text-lg">
-          {currencyFormat(subTotal)}
-        </span>
-        <span className="mt-2 text-lg">Envío</span>
-
-        {!address.tipoEnvio ? (
-          <>
-            <span className="text-right mt-2 text-lg">
-              {currencyFormat(10000)}
-            </span>
-          </>
-        ) : (
-          <>
-            <span className="text-right mt-2 text-lg">{currencyFormat(0)}</span>
-          </>
-        )}
-
-        {/* <span>Impuestos (15%)</span>
+          {/* <span>Impuestos (15%)</span>
         <span className="text-right">{currencyFormat(tax)}</span> */}
 
-        <div className="flex justify-between flex-col flex-wrap w-full">
-          <span className="mt-5 text-2xl">Total: </span>
-          <span className="mt-1 text-2xl">{currencyFormat(total)}</span>
+          <div className="flex justify-between flex-col flex-wrap w-full">
+            <span className="mt-5 text-2xl">Total: </span>
+            <span className="mt-1 text-2xl">{currencyFormat(total)}</span>
+          </div>
         </div>
-      </div>
 
-      <div className="mt-5 mb-2 w-full">
-        <p className="mb-5">
-          {/* Disclaimer */}
-          <span className="text-xs">
-            Al hacer clic en Pagar, aceptas nuestros &quot;
-            <a
-              href="#"
-              className="underline"
-            >
-              términos y condiciones
-            </a>
-            &ldquo; y&ldquo;
-            <a
-              href="#"
-              className="underline"
-            >
-              política de privacidad
-            </a>
-          </span>
-        </p>
+        <div className="mt-5 mb-2 w-full">
+          <p className="mb-5">
+            {/* Disclaimer */}
+            <span className="text-xs">
+              Al hacer clic en Pagar, aceptas nuestros &quot;
+              <a
+                href="#"
+                className="underline"
+              >
+                términos y condiciones
+              </a>
+              &ldquo; y&ldquo;
+              <a
+                href="#"
+                className="underline"
+              >
+                política de privacidad
+              </a>
+            </span>
+          </p>
 
-        <p className="text-red-600">{errorMessage}</p>
+          <p className="text-red-600">{errorMessage}</p>
 
-        <button
-          className={clsx("flex w-full justify-center", {
-            "flex items-center text-center justify-center bg-gradient-to-r from-lime-700 to-lime-600 rounded-sm mt-3 lg:mt-0 py-2 w-full m-auto text-white font-semibold hover:cursor-pointer shadow-md hover:scale-105 transition-all duration-150":
-              !isPlacingOrder,
-            "btn-disabled": isPlacingOrder,
-          })}
-          onClick={onPlaceOrder}
-        >
-          <span className={`uppercase font-semibold tracking-wider text-lg`}>
-            Pagar
-          </span>
-          {/* <GoShieldLock
+          {/* <button
+            className={clsx("flex w-full justify-center", {
+              "flex items-center text-center justify-center bg-gradient-to-r from-lime-700 to-lime-600 rounded-sm mt-3 lg:mt-0 py-2 w-full m-auto text-white font-semibold hover:cursor-pointer shadow-md hover:scale-105 transition-all duration-150":
+                !isPlacingOrder,
+              "btn-disabled": isPlacingOrder,
+            })}
+            onClick={onPlaceOrder}
+          >
+            <span className={`uppercase font-semibold tracking-wider text-lg`}>
+              Pagar
+            </span>
+            <GoShieldLock
             size={25}
             className="mb-1"
-          /> */}
-        </button>
+          />
+          </button> */}
 
-        <div className="flex flex-col items-center justify-center mt-5">
-          <div className="flex justify-center items-center gap-1">
-            <RiSecurePaymentLine
+          {/* <Epayco /> */}
+
+          <button
+            onClick={handlePayment}
+            disabled={!loaded}
+            className={`${
+              loaded ? "bg-blue-600" : "bg-gray-400"
+            } text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition`}
+          >
+            {loaded ? "Pagar con Epayco" : "Cargando..."}
+          </button>
+
+          <div className="flex flex-col items-center justify-center mt-5">
+            <div className="flex justify-center items-center gap-1">
+              {/* <RiSecurePaymentLine
               size={20}
               className="text-gray-600"
-            />
+            /> */}
 
-            <span
-              className={`${fontTitle.className} text-xs text-gray-600 font-bold`}
-            >
-              Pago totalmente seguro con{" "}
-              <span className="text-gray-800">mercadopago</span>
-            </span>
-          </div>
-          <div className="flex items-center justify-center gap-3">
+              <span
+                className={`flex items-center ${fontTitle.className} text-sm text-gray-600 font-bold`}
+              >
+                Pago totalmente seguro con
+                {/* <Image
+                  src={"/wompi/logo.svg"}
+                  alt="logo wompi"
+                  width={80}
+                  height={80}
+                /> */}
+              </span>
+            </div>
+            {/* <div className="flex items-center justify-center gap-3">
             <Image
               src={`/footerCheckout-mercadopago.svg`}
               alt="mercadopago"
@@ -232,9 +326,10 @@ export const PlaceOrder = () => {
               height={20}
               className="rounded"
             />
+          </div> */}
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };

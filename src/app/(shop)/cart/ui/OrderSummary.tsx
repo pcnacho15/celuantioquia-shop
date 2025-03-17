@@ -53,11 +53,11 @@ export const OrderSummary = () => {
             className={`flex items-center justify-center gap-2 bg-gradient-to-r from-lime-700 to-lime-600 text-gray-50 py-2 px-4 rounded-sm transition-all w-full hover:scale-105 duration-300`}
             href="/checkout/address"
           >
-            <span className={`uppercase font-semibold`}>pago seguro</span>
-            <TbLockDollar
+            <span className={`font-semibold`}>Continuar con el Pago</span>
+            {/* <TbLockDollar
               size={25}
               className="mb-1"
-            />
+            /> */}
           </Link>
         ) : (
           <button
@@ -75,13 +75,13 @@ export const OrderSummary = () => {
             Medios de pago y sitio seguro
           </span>
           <div className="flex items-center justify-center gap-3">
-            <Image
+            {/* <Image
               src={`/footerCheckout-mercadopago.svg`}
               alt="mercadopago"
               width={60}
               height={60}
               className="rounded"
-            />
+            /> */}
             <Image
               src={`/footerCheckout-efecty.svg`}
               alt="efecty"
