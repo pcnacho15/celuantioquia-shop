@@ -138,9 +138,9 @@ export const TopMenu = () => {
         {isAutenticated ? (
           <button
             onClick={() => openSideMenu()}
-            className="flex items-center gap-1 m-2 text-sm rounded-md transition-all hover:scale-105 duration-300 bg-white p-2 shadow-md"
+            className="flex items-center gap-1 m-2 text-sm rounded-md transition-all hover:scale-105 duration-300 bg-lime-600 p-2 shadow-md"
           >
-            <FaUserAstronaut className="w-6 h-6" />
+            <FaUserAstronaut className="w-6 h-6 text-gray-100" />
           </button>
         ) : (
           <Link
