@@ -35,7 +35,7 @@ export async function POST(request: Request, segmentData: {params: Params}) {
                   data: {
                     transactionId: payment!.id?.toString(),
                     isPaid: true,
-                    paidAt: new Date(),
+                    // paidAt: new Date(),
                   },
                 });
             }

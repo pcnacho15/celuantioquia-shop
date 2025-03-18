@@ -1,124 +1,137 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { PrismaClient } from "@prisma/client"; // Si usas Prisma para la BD
 import crypto from "crypto";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+
+import getRawBody from "raw-body";
+import querystring from "querystring";
 
 // Instancia de Prisma (o la BD que estés usando)
 const prisma = new PrismaClient();
 
-export async function POST(
-  req: Request
-) {
+export const config = {
+  api: {
+    bodyParser: false, // Desactivar bodyParser
+  },
+};
+
+export async function POST(req: NextRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
     return NextResponse.json({ error: "Método no permitido" }, { status: 405 });
   }
 
   try {
     // Leer el body crudo
-    const body = await req.json();
+    const rawBody = await req.text();
+    const body = querystring.parse(rawBody);
 
-    console.log(body);
+    console.log(body)
+
+    const {
+      x_signature, // Firma de seguridad de Epayco
+      x_ref_payco, // ID del pago en Epayco
+      x_transaction_state, // Estado de la transacción
+      x_amount, // Monto pagado
+      x_currency_code, // Moneda
+      x_customer_email, // Correo del comprador
+      x_id_factura, // ID de la orden en tu BD
+      x_fecha_transaccion,
+      x_transaction_id,
+    } = body;
+
+    //** Paso 1: Verificar la firma de seguridad**
+    const signatureString = `${process.env.P_CUST_ID_CLIENTE}^${process.env.P_KEY}^${x_ref_payco}^${x_transaction_id}^${x_amount}^${x_currency_code}`;
+
+    const generatedSignature = crypto
+      .createHash("sha256")
+      .update(signatureString)
+      .digest("hex");
+
+    console.log(generatedSignature);
+    console.log(x_signature);
+
+    if (generatedSignature !== x_signature) {
+      return NextResponse.json({ error: "Firma no válida" }, { status: 401 });
+    }
+
+    //** Paso 2: Validar el estado de la transacción**
+    let estado = false;
+    if (x_transaction_state === "Aceptada") estado = true;
+    if (x_transaction_state === "Rechazada") estado = false;
+    // if (x_transaction_state === "Fallida") estado = "fallido";
+
+    //** Paso 3: Actualizar el estado en la base de datos**
+    await prisma.order.update({
+      where: { id: String(x_id_factura) }, // ID de la orden en la BD
+      data: {
+        isPaid: estado,
+        paidAt: String(x_fecha_transaccion),
+        refEpayco: String(x_ref_payco),
+      },
+    });
+
+    //** Paso 4: Responder a Epayco**
     return NextResponse.json(
-      { success: true, message: "Notificación recibida" },
+      { message: "Notificación recibida" },
       { status: 200 }
     );
 
-    // const {
-    //   x_signature, // Firma de seguridad de Epayco
-    //   x_ref_payco, // ID del pago en Epayco
-    //   x_transaction_state, // Estado de la transacción
-    //   x_amount, // Monto pagado
-    //   x_currency, // Moneda
-    //   x_customer_email, // Correo del comprador
-    //   x_extra1, // ID de la orden en tu BD
-    // } = req.body;
-
-    // // 🔍 **Paso 1: Verificar la firma de seguridad**
-    // const signatureString = `${process.env.NEXT_PUBLIC_EPAYCO_KEY}^${x_ref_payco}^${x_transaction_state}^${x_amount}^${x_currency}`;
-    // const generatedSignature = crypto
-    //   .createHash("sha256")
-    //   .update(signatureString)
-    //   .digest("hex");
-
-    // if (generatedSignature !== x_signature) {
-    //   return res.status(401).json({ error: "Firma no válida" });
-    // }
-
-    // // 🔍 **Paso 2: Validar el estado de la transacción**
-    // let estado = "pendiente";
-    // if (x_transaction_state === "Aceptada") estado = "pagado";
-    // if (x_transaction_state === "Rechazada") estado = "rechazado";
-    // if (x_transaction_state === "Fallida") estado = "fallido";
-
-    // // 🔍 **Paso 3: Actualizar el estado en la base de datos**
-    // await prisma.order.update({
-    //   where: { id: x_extra1 }, // ID de la orden en la BD
-    //   data: { estado, transaccionId: x_ref_payco },
-    // });
-
-    // // 🔍 **Paso 4: Responder a Epayco**
-    // res.status(200).json({ message: "Notificación recibida" });
   } catch (error) {
     console.error("Error procesando la notificación de Epayco:", error);
     // rrres.status(500).json({ error: "Error interno del servidor" });
     return NextResponse.json({ error }, { status: 500 });
-    
   }
 }
 
-export async function GET(req: Request) {
-//   if (req.method !== "POST") {
-//     return NextResponse.json({ error: "Método no permitido" }, { status: 405 });
-//   }
-
+export async function PUT(req: Request) {
   try {
-    // Leer el body crudo
-    const body = await req.json();
+    const { ref_epayco } = await req.json(); // Obtener la referencia de pago desde el frontend
+    
 
-    console.log(body);
-    return NextResponse.json(
-      { success: true, message: "Notificación recibida" },
-      { status: 200 }
+    if (!ref_epayco) {
+      return NextResponse.json(
+        { error: "Referencia de pago requerida" },
+        { status: 400 }
+      );
+    }
+
+    // 🔹 Consultar el estado de la transacción en Epayco
+    const response = await fetch(
+      `https://secure.epayco.co/validation/v1/reference/${ref_epayco}`
     );
+    const data = await response.json();
+    console.log(data);
 
-    // const {
-    //   x_signature, // Firma de seguridad de Epayco
-    //   x_ref_payco, // ID del pago en Epayco
-    //   x_transaction_state, // Estado de la transacción
-    //   x_amount, // Monto pagado
-    //   x_currency, // Moneda
-    //   x_customer_email, // Correo del comprador
-    //   x_extra1, // ID de la orden en tu BD
-    // } = req.body;
+    if (!data.success) {
+      return NextResponse.json(
+        { error: "No se pudo consultar el estado del pago" },
+        { status: 500 }
+      );
+    }
 
-    // // 🔍 **Paso 1: Verificar la firma de seguridad**
-    // const signatureString = `${process.env.NEXT_PUBLIC_EPAYCO_KEY}^${x_ref_payco}^${x_transaction_state}^${x_amount}^${x_currency}`;
-    // const generatedSignature = crypto
-    //   .createHash("sha256")
-    //   .update(signatureString)
-    //   .digest("hex");
+    console.log("Estado del pago en Epayco:", data);
 
-    // if (generatedSignature !== x_signature) {
-    //   return res.status(401).json({ error: "Firma no válida" });
-    // }
+    // 🔹 Extraer el estado de la transacción
+    const transactionState = data.data.x_transaction_state; // Aceptada, Pendiente, Rechazada
 
-    // // 🔍 **Paso 2: Validar el estado de la transacción**
-    // let estado = "pendiente";
-    // if (x_transaction_state === "Aceptada") estado = "pagado";
-    // if (x_transaction_state === "Rechazada") estado = "rechazado";
-    // if (x_transaction_state === "Fallida") estado = "fallido";
+    let estado = false;
+    if (transactionState === "Aceptada") estado = true;
 
-    // // 🔍 **Paso 3: Actualizar el estado en la base de datos**
-    // await prisma.order.update({
-    //   where: { id: x_extra1 }, // ID de la orden en la BD
-    //   data: { estado, transaccionId: x_ref_payco },
-    // });
+    // 🔹 Actualizar la orden en la base de datos si el estado ha cambiado
+    const ordenActualizada = await prisma.order.update({
+      where: { id: data.data.x_id_factura },
+      data: { isPaid: estado, paidAt: data.data.x_fecha_transaccion },
+    });
 
-    // // 🔍 **Paso 4: Responder a Epayco**
-    // res.status(200).json({ message: "Notificación recibida" });
+    return NextResponse.json({
+      message: "Orden actualizada",
+      orden: ordenActualizada,
+    });
   } catch (error) {
-    console.error("Error procesando la notificación de Epayco:", error);
-    // rrres.status(500).json({ error: "Error interno del servidor" });
-    return NextResponse.json({ error }, { status: 500 });
+    console.error("Error al validar la orden:", error);
+    return NextResponse.json(
+      { error: "Error interno del servidor" },
+      { status: 500 }
+    );
   }
 }

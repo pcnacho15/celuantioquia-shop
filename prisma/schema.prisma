@@ -88,15 +88,15 @@ model User {
 }
 
 model Order {
-  id           String    @id @default(uuid())
+  id           String   @id @default(uuid())
   subTotal     Float
   tax          Float?
   tipoEnvio    Boolean?
   envio        Float?
   total        Float
   itemsInOrder Int
-  isPaid       Boolean   @default(false)
-  paidAt       DateTime?
+  isPaid       Boolean  @default(false)
+  paidAt       String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -109,6 +109,7 @@ model Order {
   OrderAdress OrderAdress?
 
   transactionId String?
+  refEpayco     String?
 }
 
 model OrderItem {

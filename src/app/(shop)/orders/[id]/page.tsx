@@ -6,12 +6,16 @@ import { redirect } from "next/navigation";
 import { currencyFormat, fontTitle } from "@/utils";
 import { OrderStatus, Title } from "@/modules";
 import { getOrderById } from "@/modules/orders/actions/get-order-by-id";
+import prisma from "@/lib/prisma";
 // import { createPreferenceMP } from "@/modules/pagos/actions/mercado-pago/create-prefecence";
 // import { MercadoPagoButton } from "@/modules/pagos/components/MercadoPagoButton";
 
-
 type Params = Promise<{
   id: string;
+}>;
+
+type SearchParams = Promise<{
+  ref_payco?: string;
 }>;
 
 // interface Props {
@@ -20,13 +24,30 @@ type Params = Promise<{
 //   };
 // }
 
-export default async function OrderPage(props: { params: Params }) {
+export default async function OrderPage(props: {
+  params: Params;
+  searchParams: SearchParams;
+}) {
   const { id } = await props.params;
+  const currentParams = await props.searchParams;
 
-  const { ok, order } = await getOrderById(id);
+  const refTransaction = currentParams.ref_payco;
+
+  let { ok, order } = await getOrderById(id);
 
   if (!ok) {
     redirect("/");
+  }
+
+  if (refTransaction && !order?.transactionId) {
+    await prisma.order.update({
+      where: {
+        id: id,
+      },
+      data: {
+        transactionId: refTransaction,
+      },
+    });
   }
 
   // const preferenceId = (await createPreferenceMP(order!.id)) || "";

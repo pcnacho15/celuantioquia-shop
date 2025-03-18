@@ -82,12 +82,7 @@ export const PlaceOrder = () => {
 
     return resp.prismaTx;
 
-    // const urlMercadoPago = await createPreferenceMP(resp.order!.id);
-
-    //* Todo salió bien!
-    // clearCart();
-    // // router.replace("orders/" + resp.order?.id);
-    // router.replace(urlMercadoPago);
+    // router.replace("orders/" + resp.order?.id);
   };
 
 
@@ -107,7 +102,7 @@ export const PlaceOrder = () => {
       const resp = await onPlaceOrder();
       // console.log()
 
-      const productos = resp?.updatedProducts.map((p) => p.title).join(', ');
+      const productos = resp?.updatedProducts.map((p) => p.title).join(", ");
       // console.log(productos);
 
       const data = {
@@ -130,6 +125,9 @@ export const PlaceOrder = () => {
       };
 
       handler.open(data);
+      
+      //* Todo salió bien!
+      clearCart();
     };
 
   if (!loaded) {

@@ -38,6 +38,12 @@ export const Sidebar = () => {
     window.location.reload();
   };
 
+
+  const handleOrdes = ()=> {
+    closeMenu()
+    window.location.replace("/orders");
+  }
+
   return (
     <div>
       {/* Background black */}
@@ -133,7 +139,7 @@ export const Sidebar = () => {
 
             <Link
               href="/orders"
-              onClick={() => closeMenu()}
+              onClick={() => handleOrdes()}
               className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
             >
               <IoTicketOutline size={30} />
