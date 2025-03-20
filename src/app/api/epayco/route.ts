@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { PrismaClient } from "@prisma/client"; // Si usas Prisma para la BD
+import { PrismaClient, StatusOrder } from "@prisma/client"; // Si usas Prisma para la BD
 import crypto from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -55,10 +55,10 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
     }
 
     //** Paso 2: Validar el estado de la transacción**
-    let estado = false;
-    if (x_transaction_state === "Aceptada") estado = true;
-    if (x_transaction_state === "Rechazada") estado = false;
-    // if (x_transaction_state === "Fallida") estado = "fallido";
+    let estado: StatusOrder = "pendiente";
+    if (x_transaction_state === "Aceptada") estado = "pagado";
+    if (x_transaction_state === "Pendiente") estado = "pendiente";
+    if (x_transaction_state === "Rechazada") estado = "rechazado";
 
     //** Paso 3: Actualizar el estado en la base de datos**
     await prisma.order.update({
@@ -109,8 +109,10 @@ export async function PUT(req: Request) {
     // 🔹 Extraer el estado de la transacción
     const transactionState = data.data.x_transaction_state; // Aceptada, Pendiente, Rechazada
 
-    let estado = false;
-    if (transactionState === "Aceptada") estado = true;
+    let estado: StatusOrder = "pendiente";
+    if (transactionState === "Aceptada") estado = "pagado";
+    if (transactionState === "Pendiente") estado = "pendiente";
+    if (transactionState === "Rechazada") estado = "rechazado";
 
     // 🔹 Actualizar la orden en la base de datos si el estado ha cambiado
     const ordenActualizada = await prisma.order.update({

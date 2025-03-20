@@ -53,10 +53,16 @@ export const getOrderById = async (id: string) => {
     //   }
     // }
 
-    if (!order.isPaid && order.transactionId) {
-      const orderValidate = await revalidateOrders(order.transactionId);
-      order.isPaid = orderValidate.isPaid;
-      order.paidAt = orderValidate.paidAt;
+    if (order.isPaid != 'pendiente' && order.transactionId) {
+      const { ok, order: orderValidate } = await revalidateOrders(order.transactionId);
+      console.log({
+        ok, orderValidate
+      })
+      if (ok && orderValidate) {
+        order.isPaid = orderValidate.isPaid;
+        order.paidAt = orderValidate.paidAt;
+      }
+
     }
 
     return {

@@ -177,7 +177,7 @@ export default async function OrderPage(props: {
                 <span className="font-bold">Orden N°:</span> {id}
               </span> */}
               <OrderStatus
-                isPaid={order?.isPaid ?? false}
+                isPaid={order?.isPaid ?? ""}
                 refEpayco={order?.refEpayco || ""}
               />
               {/*  <div className="mt-5 mb-2 w-auto">

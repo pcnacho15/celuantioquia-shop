@@ -39,6 +39,7 @@ enum Estado {
 enum StatusOrder {
   pendiente
   pagado
+  rechazado
 }
 
 model Category {
@@ -93,14 +94,14 @@ model User {
 }
 
 model Order {
-  id           String   @id @default(uuid())
+  id           String      @id @default(uuid())
   subTotal     Float
-  tax          Float?   @default(0)
+  tax          Float?      @default(0)
   tipoEnvio    Boolean?
-  costo_envio  Float?   @default(0)
+  costo_envio  Float?      @default(0)
   total        Float
   itemsInOrder Int
-  isPaid       Boolean  @default(false)
+  isPaid       StatusOrder @default(pendiente)
   paidAt       String?
 
   createdAt DateTime @default(now())
