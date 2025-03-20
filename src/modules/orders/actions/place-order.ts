@@ -38,7 +38,7 @@ export const placeOrder = async (
   const itemsInOrder = productIds.reduce((count, p) => count + p.quantity, 0);
 
   // Los totales de tax, subtotal, y total
-  const { subTotal, /*tax,*/ total } = productIds.reduce(
+  let { subTotal, /*tax,*/ total } = productIds.reduce(
     (totals, item) => {
       const productQuantity = item.quantity;
       const product = products.find((product) => product.id === item.productId);
@@ -91,13 +91,25 @@ export const placeOrder = async (
         }
       });
 
+      //* Calcular costo de envío
+      let costoEnvio = 0;
+      if (!address.tipoEnvio) {
+        if (productIds.length > 4) {
+          costoEnvio = 40000;
+          total += costoEnvio;
+        }else {
+          costoEnvio = 20000
+          total += costoEnvio;
+        }
+      }
+
       // 2. Crear la orden - Encabezado - Detalles
       const order = await tx.order.create({
         data: {
           userId: userId,
           itemsInOrder: itemsInOrder,
           tipoEnvio: address.tipoEnvio,
-          // envio: 12000,
+          costo_envio: costoEnvio,
           // tax: tax,
           subTotal: subTotal,
           total: total,

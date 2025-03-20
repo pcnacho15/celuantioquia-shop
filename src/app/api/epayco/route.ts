@@ -25,7 +25,7 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
     const rawBody = await req.text();
     const body = querystring.parse(rawBody);
 
-    console.log(body)
+    console.log(body);
 
     const {
       x_signature, // Firma de seguridad de Epayco
@@ -75,7 +75,6 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
       { message: "Notificación recibida" },
       { status: 200 }
     );
-
   } catch (error) {
     console.error("Error procesando la notificación de Epayco:", error);
     // rrres.status(500).json({ error: "Error interno del servidor" });
@@ -86,7 +85,6 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
 export async function PUT(req: Request) {
   try {
     const { ref_epayco } = await req.json(); // Obtener la referencia de pago desde el frontend
-    
 
     if (!ref_epayco) {
       return NextResponse.json(
@@ -100,7 +98,6 @@ export async function PUT(req: Request) {
       `https://secure.epayco.co/validation/v1/reference/${ref_epayco}`
     );
     const data = await response.json();
-    console.log(data);
 
     if (!data.success) {
       return NextResponse.json(
@@ -108,8 +105,6 @@ export async function PUT(req: Request) {
         { status: 500 }
       );
     }
-
-    console.log("Estado del pago en Epayco:", data);
 
     // 🔹 Extraer el estado de la transacción
     const transactionState = data.data.x_transaction_state; // Aceptada, Pendiente, Rechazada
@@ -125,7 +120,7 @@ export async function PUT(req: Request) {
 
     return NextResponse.json({
       message: "Orden actualizada",
-      orden: ordenActualizada,
+      order: ordenActualizada,
     });
   } catch (error) {
     console.error("Error al validar la orden:", error);

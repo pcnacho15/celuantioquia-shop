@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { auth } from "@/utils";
+import { revalidateOrders } from "./revalidate-orders-epayco";
 
 export const getOrderById = async (id: string) => {
   // const session = await auth();
@@ -51,6 +52,12 @@ export const getOrderById = async (id: string) => {
     //     throw `${id} no es de ese usuario`;
     //   }
     // }
+
+    if (!order.isPaid && order.transactionId) {
+      const orderValidate = await revalidateOrders(order.transactionId);
+      order.isPaid = orderValidate.isPaid;
+      order.paidAt = orderValidate.paidAt;
+    }
 
     return {
       ok: true,

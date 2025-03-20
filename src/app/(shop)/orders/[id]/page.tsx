@@ -57,9 +57,7 @@ export default async function OrderPage(props: {
   return (
     <div className="flex justify-center items-center mt-10 mb-36 px-0">
       <div className="flex flex-col w-[1000px]">
-        {/* <Title title={`Orden #${id.split("-").at(-1)}`} /> */}
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
+        <div className="flex flex-col-reverse sm:grid sm:grid-cols-2 gap-10">
           {/* Carrito */}
           <div className="flex flex-col mt-5">
             <div
@@ -104,78 +102,85 @@ export default async function OrderPage(props: {
           </div>
 
           {/* Checkout - Resumen de orden */}
-          <div className="flex flex-col bg-white rounded-xl shadow-xl p-7">
-            <h2
-              className={`text-2xl mb-2 ${fontTitle.className} font-semibold`}
-            >
-              Datos de envío
-            </h2>
-            <div className="mb-5">
-              <div className="flex flex-col gap-1">
-                <p className="text-lg">
-                  {address!.nombres} {address!.apellidos}
-                </p>
-                <p className="capitalize text-lg">
-                  {address!.municipio} - {address!.departamento}
-                </p>
-                <p className="capitalize text-lg">{address!.direccion}</p>
-                <p className="capitalize text-lg">{address!.direccion2}</p>
-                <p className="text-lg">{address!.telefono}</p>
-                <p className="text-lg">
-                  Tipo de envío:{" "}
-                  {!order?.tipoEnvio ? "Nacional" : "Recoger en la tienda"}
-                </p>
+          <div className="flex flex-col bg-white rounded-xl shadow-xl">
+            <div className="p-4">
+              <h2
+                className={`text-2xl mb-2 ${fontTitle.className} font-semibold`}
+              >
+                Datos de envío
+              </h2>
+              <div className="mb-5">
+                <div className="flex flex-col gap-1">
+                  <p className="text-lg">
+                    {address!.nombres} {address!.apellidos}
+                  </p>
+                  <p className="capitalize text-lg">
+                    {address!.municipio} - {address!.departamento}
+                  </p>
+                  <p className="capitalize text-lg">{address!.direccion}</p>
+                  <p className="capitalize text-lg">{address!.direccion2}</p>
+                  <p className="text-lg">{address!.telefono}</p>
+                  <p className="text-lg">
+                    Tipo de envío:{" "}
+                    {!order?.tipoEnvio ? "Nacional" : "Recoger en la tienda"}
+                  </p>
+                </div>
               </div>
-            </div>
 
-            {/* Divider */}
-            <div className="w-full h-0.5 rounded bg-gray-200 mb-5" />
+              {/* Divider */}
+              <div className="w-full h-0.5 rounded bg-gray-200 mb-5" />
 
-            <h2
-              className={`text-2xl mb-2 ${fontTitle.className} font-semibold`}
-            >
-              Resumen de tu compra
-            </h2>
+              <h2
+                className={`text-2xl mb-2 ${fontTitle.className} font-semibold`}
+              >
+                Resumen de tu compra
+              </h2>
 
-            <div className="grid grid-cols-2 mb-5">
-              <span className="text-lg">No. Productos</span>
-              <span className="text-right text-lg">
-                {order?.itemsInOrder === 1
-                  ? "1 artículo"
-                  : `${order?.itemsInOrder} artículos`}
-              </span>
+              <div className="grid grid-cols-2 mb-5">
+                <span className="text-lg">No. Productos</span>
+                <span className="text-right text-lg">
+                  {order?.itemsInOrder === 1
+                    ? "1 artículo"
+                    : `${order?.itemsInOrder} artículos`}
+                </span>
 
-              <span className="text-lg mt-1">Subtotal</span>
-              <span className="text-right text-lg mt-1">
-                {currencyFormat(order!.subTotal)}
-              </span>
-              <span className="mt-1 text-lg">Envío</span>
-              {!order?.tipoEnvio ? (
-                <>
-                  <span className="text-right mt-1 text-lg">
-                    {currencyFormat(10000)}
-                  </span>
-                </>
-              ) : (
-                <>
-                  <span className="text-right mt-1 text-lg">
-                    {currencyFormat(0)}
-                  </span>
-                </>
-              )}
+                <span className="text-lg mt-1">Subtotal</span>
+                <span className="text-right text-lg mt-1">
+                  {currencyFormat(order!.subTotal)}
+                </span>
+                <span className="mt-1 text-lg">Envío</span>
+                {!order?.tipoEnvio ? (
+                  <>
+                    <span className="text-right mt-1 text-lg">
+                      {currencyFormat(10000)}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span className="text-right mt-1 text-lg">
+                      {currencyFormat(0)}
+                    </span>
+                  </>
+                )}
 
-              {/* <span>Impuestos (15%)</span>
+                {/* <span>Impuestos (15%)</span>
               <span className="text-right">{currencyFormat(order!.tax)}</span> */}
 
-              <div className="flex flex-col flex-wrap w-full">
-                <span className="mt-5 text-2xl">Total: </span>
-                <span className="mt-1 text-2xl">
-                  {currencyFormat(order!.total)}
-                </span>
+                <div className="flex flex-col flex-wrap w-full">
+                  <span className="mt-5 text-2xl">Total: </span>
+                  <span className="mt-1 text-2xl">
+                    {currencyFormat(order!.total)}
+                  </span>
+                </div>
               </div>
-            </div>
-            <OrderStatus isPaid={order?.isPaid ?? false} />
-            {/*  <div className="mt-5 mb-2 w-auto">
+              {/* <span className="font-medium px-4 pt-4 mb-2 text-center">
+                <span className="font-bold">Orden N°:</span> {id}
+              </span> */}
+              <OrderStatus
+                isPaid={order?.isPaid ?? false}
+                refEpayco={order?.refEpayco || ""}
+              />
+              {/*  <div className="mt-5 mb-2 w-auto">
               {order?.isPaid ? (
                 <OrderStatus isPaid={order?.isPaid ?? false} />
               ) : (
@@ -191,6 +196,7 @@ export default async function OrderPage(props: {
                 </>
               )}
             </div>*/}
+            </div>
           </div>
         </div>
       </div>

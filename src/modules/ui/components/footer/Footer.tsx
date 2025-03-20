@@ -15,9 +15,20 @@ export const Footer = () => {
           <span>© {new Date().getFullYear()}</span>
         </Link>
 
-        <Link href="/">Privacidad & Legal</Link>
+        <Link
+          href="/"
+          className="hover:text-lime-600"
+        >
+          Privacidad & Legal
+        </Link>
 
-        <Link href="/">Ubicaciones</Link>
+        <Link
+          className="hover:text-lime-600"
+          href="https://maps.app.goo.gl/Gmia6qPnk1uzDXS16"
+          target="_blank"
+        >
+          Ubicaciones
+        </Link>
       </div>
       <div className="flex px-10 justify-center items-center text-sm gap-5">
         <Link

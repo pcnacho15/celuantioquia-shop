@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import Image from "next/image";
 // import { GoShieldLock } from "react-icons/go";
 import { currencyFormat, fontTitle } from "@/utils";
@@ -14,9 +14,9 @@ import { placeOrder } from "@/modules/orders/actions/place-order";
 // import { RiSecurePaymentLine } from "react-icons/ri";
 import Link from "next/link";
 import { TbEdit } from "react-icons/tb";
-import { createPreferenceMP } from "@/modules/pagos/actions/mercado-pago/create-prefecence";
-import Script from "next/script";
-import { Epayco } from "@/modules/pagos/components/Epayco";
+// import { createPreferenceMP } from "@/modules/pagos/actions/mercado-pago/create-prefecence";
+// import Script from "next/script";
+// import { Epayco } from "@/modules/pagos/components/Epayco";
 
 // Declaración del objeto ePayco en el ámbito global
 declare global {
@@ -29,17 +29,34 @@ export const PlaceOrder = () => {
   const [loaded, setLoaded] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
-
-  const router = useRouter();
+  const [costoEnvio, setCostoEnvio] = useState(0)
 
   const address = useAdresStore((state) => state.getAdress());
+  
   const cart = useCartStore((state) => state.cart);
-  const clearCart = useCartStore((state) => state.clearCart);
   const { subTotal, /*tax*/ total, totalItems } = useCartStore((state) =>
-    state.getSummaryProducts()
-  );
+     state.getSummaryProducts()
+   );
+
+   const [totalOrder, setTotalOrder] = useState(0);
+
+  // const router = useRouter();
+
+  const clearCart = useCartStore((state) => state.clearCart);
+ 
 
   useEffect(() => {
+    //* Calcular costo de envío
+    if (!address.tipoEnvio) {
+      if (cart.length > 4) {
+        setCostoEnvio(40000);
+        setTotalOrder(total + 40000);
+      } else {
+        setCostoEnvio(20000);
+        setTotalOrder(total + 20000);
+      }
+    }
+
     // Verificar si el script ya está cargado para evitar duplicados
     if (!document.querySelector("#epayco-script")) {
       const script = document.createElement("script");
@@ -110,9 +127,9 @@ export const PlaceOrder = () => {
         description: productos,
         invoice: resp!.order.id,
         currency: "cop",
-        amount: "10000",
-        tax_base: "10000",
-        tax: "0",
+        amount: resp?.order.total.toString(),
+        tax_base: "0",
+        tax: resp?.order.tax?.toString(),
         country: "CO",
         lang: "es",
         external: "false",
@@ -136,7 +153,7 @@ export const PlaceOrder = () => {
 
   return (
     <>
-      <div className="rounded-xl shadow-xl pt-7 px-7 m-auto">
+      <div className="rounded-xl shadow-xl pt-2 px-7 bg-white">
         <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-2 md:mb-1">
           <h2 className={`${fontTitle.className} text-xl mb-2 font-semibold`}>
             Dirección de entrega
@@ -157,7 +174,7 @@ export const PlaceOrder = () => {
             {address.municipio} - {address.departamento}
           </p>
           <p className="capitalize text-lg">
-            {address.direccion} ({address.direccion2})
+            {address.direccion} {address.direccion2}
           </p>
           <p className="text-lg">{address.telefono}</p>
           <p className="text-lg capitalize">
@@ -190,7 +207,7 @@ export const PlaceOrder = () => {
           {!address.tipoEnvio ? (
             <>
               <span className="text-right mt-2 text-lg">
-                {currencyFormat(10000)}
+                {currencyFormat(costoEnvio)}
               </span>
             </>
           ) : (
@@ -206,7 +223,7 @@ export const PlaceOrder = () => {
 
           <div className="flex justify-between flex-col flex-wrap w-full">
             <span className="mt-5 text-2xl">Total: </span>
-            <span className="mt-1 text-2xl">{currencyFormat(total)}</span>
+            <span className="mt-1 text-2xl">{currencyFormat(totalOrder)}</span>
           </div>
         </div>
 
@@ -221,7 +238,7 @@ export const PlaceOrder = () => {
               >
                 términos y condiciones
               </a>
-              &ldquo; y&ldquo;
+              &ldquo; y &ldquo;
               <a
                 href="#"
                 className="underline"
@@ -257,7 +274,7 @@ export const PlaceOrder = () => {
             disabled={!loaded}
             className={`${
               loaded ? "bg-blue-600" : "bg-gray-400"
-            } text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition`}
+            } flex items-center justify-center w-full active:scale-95 text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition-all duration-200`}
           >
             {loaded ? "Pagar con Epayco" : "Cargando..."}
           </button>
@@ -270,15 +287,17 @@ export const PlaceOrder = () => {
             /> */}
 
               <span
-                className={`flex items-center ${fontTitle.className} text-sm text-gray-600 font-bold`}
+                className={`flex gap-2 items-center ${fontTitle.className} text-sm text-gray-600 font-bold`}
               >
                 Pago totalmente seguro con
-                {/* <Image
-                  src={"/wompi/logo.svg"}
+                <Image
+                  src={
+                    "https://multimedia.epayco.co/epayco-landing/btns/epayco-logo-fondo-oscuro-lite.png"
+                  }
                   alt="logo wompi"
-                  width={80}
-                  height={80}
-                /> */}
+                  width={70}
+                  height={70}
+                />
               </span>
             </div>
             {/* <div className="flex items-center justify-center gap-3">

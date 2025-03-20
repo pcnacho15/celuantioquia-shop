@@ -27,27 +27,20 @@ export const getOrdersByUser = async () => {
           correo: session.user.email,
         },
       },
-    },
-  });
-
-  orders.map(async (order) => {
-    if (!order.isPaid && order.transactionId) {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/epayco`,
-          {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ ref_epayco: order.transactionId }),
+      OrderItem: {
+        include: {
+          product: {
+            include: {
+              ProductImages: {
+                select: {
+                  url: true
+                }
+              }
+            }
           }
-        );
-
-        const data = await response.json();
-        console.log(data);
-      } catch (error) {
-        console.error("Error validando la orden:", error);
+        }
       }
-    }
+    },
   });
 
   return {

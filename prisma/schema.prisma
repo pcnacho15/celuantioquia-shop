@@ -36,6 +36,11 @@ enum Estado {
   exhibicion
 }
 
+enum StatusOrder {
+  pendiente
+  pagado
+}
+
 model Category {
   id      String    @id @default(uuid())
   name    String    @unique
@@ -90,9 +95,9 @@ model User {
 model Order {
   id           String   @id @default(uuid())
   subTotal     Float
-  tax          Float?
+  tax          Float?   @default(0)
   tipoEnvio    Boolean?
-  envio        Float?
+  costo_envio  Float?   @default(0)
   total        Float
   itemsInOrder Int
   isPaid       Boolean  @default(false)
