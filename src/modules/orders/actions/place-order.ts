@@ -103,6 +103,7 @@ export const placeOrder = async (
         }
       }
 
+      console.log(userId)
       // 2. Crear la orden - Encabezado - Detalles
       const order = await tx.order.create({
         data: {
