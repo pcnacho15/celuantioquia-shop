@@ -101,7 +101,7 @@ model Order {
   costo_envio  Float?      @default(0)
   total        Float
   itemsInOrder Int
-  isPaid       StatusOrder @default(pendiente)
+  isPaid       StatusOrder? @default(pendiente)
   paidAt       String?
 
   createdAt DateTime @default(now())

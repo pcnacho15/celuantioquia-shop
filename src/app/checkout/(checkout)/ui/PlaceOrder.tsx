@@ -38,7 +38,7 @@ export const PlaceOrder = () => {
      state.getSummaryProducts()
    );
 
-   const [totalOrder, setTotalOrder] = useState(0);
+   const [totalOrder, setTotalOrder] = useState(total);
 
   // const router = useRouter();
 
