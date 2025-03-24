@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { PrismaClient, StatusOrder } from "@prisma/client"; // Si usas Prisma para la BD
+import { PrismaClient } from "@prisma/client"; // Si usas Prisma para la BD
 import crypto from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -55,7 +55,7 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
     }
 
     //** Paso 2: Validar el estado de la transacción**
-    let estado: StatusOrder = "pendiente";
+    let estado = "pendiente";
     if (x_transaction_state === "Aceptada") estado = "pagado";
     if (x_transaction_state === "Pendiente") estado = "pendiente";
     if (x_transaction_state === "Rechazada") estado = "rechazado";
@@ -109,7 +109,7 @@ export async function PUT(req: Request) {
     // 🔹 Extraer el estado de la transacción
     const transactionState = data.data.x_transaction_state; // Aceptada, Pendiente, Rechazada
 
-    let estado: StatusOrder = "pendiente";
+    let estado = "pendiente";
     if (transactionState === "Aceptada") estado = "pagado";
     if (transactionState === "Pendiente") estado = "pendiente";
     if (transactionState === "Rechazada") estado = "rechazado";

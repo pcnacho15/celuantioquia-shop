@@ -36,12 +36,6 @@ enum Estado {
   exhibicion
 }
 
-enum StatusOrder {
-  pendiente
-  pagado
-  rechazado
-}
-
 model Category {
   id      String    @id @default(uuid())
   name    String    @unique
@@ -90,18 +84,25 @@ model User {
   role          Rol     @default(user)
   image         String?
   tipo_login    String  @default("credentials")
-  Order         Order[]
+  pais          String  @default("Colombia")
+  direccion     String?
+  direccion2    String?
+
+  municipio   Municipio? @relation(fields: [municipioId], references: [id])
+  municipioId Int?
+
+  Order Order[]
 }
 
 model Order {
-  id           String      @id @default(uuid())
+  id           String   @id @default(uuid())
   subTotal     Float
-  tax          Float?      @default(0)
+  tax          Float?   @default(0)
   tipoEnvio    Boolean?
-  costo_envio  Float?      @default(0)
+  estadoEnvio  Boolean  @default(false)
+  costo_envio  Float?   @default(0)
   total        Float
   itemsInOrder Int
-  isPaid       StatusOrder? @default(pendiente)
   paidAt       String?
 
   createdAt DateTime @default(now())
@@ -166,4 +167,5 @@ model Municipio {
   // Relaciones
   departamento   Departamento @relation(fields: [departamentoId], references: [id])
   departamentoId Int
+  User           User[]
 }
